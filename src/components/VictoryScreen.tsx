@@ -119,33 +119,33 @@ export default function VictoryScreen({ teamName, elapsedSeconds, errorCount, er
 
   return (
     <div className="min-h-screen flex flex-col items-center p-4 bg-background">
-      <Trophy className="text-yellow-400 mt-6 mb-2" size={100} />
+      <Trophy className="text-amber-500 mt-6 mb-2" size={100} />
       <h1 className="font-display text-2xl text-gradient-orange mb-1 text-center">REPORTE FORENSE TOTAL</h1>
       <p className="text-foreground text-sm mb-4 text-center">Cada decisión que tomaste, desde el primer segundo.</p>
 
-      <div className="bg-card border border-border rounded-xl p-4 mb-3 w-full max-w-md text-center">
+      <div className="bg-card border border-border rounded-xl p-4 mb-3 w-full max-w-md text-center shadow-sm">
         <p className="text-muted-foreground text-xs mb-1">Estudiante</p>
         <p className="font-display text-lg text-foreground">{teamName}</p>
       </div>
 
       <div className="grid grid-cols-3 gap-2 mb-3 w-full max-w-md">
-        <div className="bg-card border border-border rounded-xl p-3 text-center">
+        <div className="bg-card border border-border rounded-xl p-3 text-center shadow-sm">
           <p className="text-muted-foreground text-[10px] mb-1">Tiempo</p>
           <p className="font-display text-lg text-orange">{timeStr}</p>
         </div>
-        <div className="bg-card border border-border rounded-xl p-3 text-center">
+        <div className="bg-card border border-border rounded-xl p-3 text-center shadow-sm">
           <p className="text-muted-foreground text-[10px] mb-1">Aciertos</p>
-          <p className="font-display text-lg text-emerald-400">{correctSections}/{totalSections}</p>
+          <p className="font-display text-lg text-emerald-600">{correctSections}/{totalSections}</p>
         </div>
-        <div className="bg-card border border-border rounded-xl p-3 text-center">
+        <div className="bg-card border border-border rounded-xl p-3 text-center shadow-sm">
           <p className="text-muted-foreground text-[10px] mb-1">Penalidades</p>
-          <p className="font-display text-lg text-red-400">{errorCount}</p>
+          <p className="font-display text-lg text-red-600">{errorCount}</p>
         </div>
       </div>
 
-      <div className="bg-card border border-border rounded-xl p-4 mb-5 w-full max-w-md text-center">
+      <div className="bg-card border border-border rounded-xl p-4 mb-5 w-full max-w-md text-center shadow-sm">
         <p className="text-muted-foreground text-xs mb-1">Nota del Sistema</p>
-        <p className="font-display text-2xl text-emerald-400">{grade}</p>
+        <p className="font-display text-2xl text-emerald-600">{grade}</p>
       </div>
 
       {/* === REPORTE FORENSE TOTAL — sección por sección === */}
@@ -153,7 +153,7 @@ export default function VictoryScreen({ teamName, elapsedSeconds, errorCount, er
         <p className="text-orange font-display text-sm mb-3 tracking-wider">🔬 REPORTE FORENSE — TODAS LAS SECCIONES</p>
 
         {forensic.length === 0 ? (
-          <Card className="bg-slate-900 border-slate-700">
+          <Card className="bg-card border-border shadow-sm">
             <CardContent className="p-4">
               <p className="text-sm text-muted-foreground">No se registraron interacciones (¿saltó el simulador?).</p>
             </CardContent>
@@ -161,7 +161,7 @@ export default function VictoryScreen({ teamName, elapsedSeconds, errorCount, er
         ) : (
           <div className="space-y-3">
             {forensic.map((f, i) => (
-              <Card key={f.id} className={`bg-slate-900 ${f.isCorrect ? 'border-emerald-500/50' : 'border-red-500/50'}`}>
+              <Card key={f.id} className={`bg-card shadow-sm ${f.isCorrect ? 'border-emerald-300' : 'border-red-300'}`}>
                 <CardHeader className="pb-2">
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex-1">
@@ -173,33 +173,33 @@ export default function VictoryScreen({ teamName, elapsedSeconds, errorCount, er
                       </CardTitle>
                     </div>
                     {f.isCorrect ? (
-                      <CheckCircle2 className="text-emerald-400 shrink-0" size={22} />
+                      <CheckCircle2 className="text-emerald-600 shrink-0" size={22} />
                     ) : (
-                      <XCircle className="text-red-400 shrink-0" size={22} />
+                      <XCircle className="text-red-600 shrink-0" size={22} />
                     )}
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-2 text-left">
-                  <div className="bg-slate-950/60 rounded-md p-2">
+                  <div className="bg-secondary rounded-md p-2">
                     <p className="text-[10px] font-display text-muted-foreground tracking-wider mb-1">TU RESPUESTA:</p>
                     <p className="text-xs text-foreground whitespace-pre-wrap break-words">{f.studentAnswer || '(vacío)'}</p>
                   </div>
 
-                  <div className="bg-emerald-950/30 rounded-md p-2 border border-emerald-500/20">
-                    <p className="text-[10px] font-display text-emerald-400 tracking-wider mb-1">💡 RESPUESTA CORRECTA:</p>
-                    <p className="text-xs text-emerald-100">{f.correctAnswer}</p>
+                  <div className="bg-emerald-50 rounded-md p-2 border border-emerald-200">
+                    <p className="text-[10px] font-display text-emerald-700 tracking-wider mb-1">💡 RESPUESTA CORRECTA:</p>
+                    <p className="text-xs text-emerald-900">{f.correctAnswer}</p>
                   </div>
 
                   {f.justification && (
-                    <div className="bg-slate-950/60 rounded-md p-2">
+                    <div className="bg-secondary rounded-md p-2">
                       <p className="text-[10px] font-display text-orange tracking-wider mb-1">📝 TU JUSTIFICACIÓN GERENCIAL:</p>
-                      <p className="text-xs text-slate-200 italic whitespace-pre-wrap break-words">"{f.justification}"</p>
+                      <p className="text-xs text-foreground italic whitespace-pre-wrap break-words">"{f.justification}"</p>
                     </div>
                   )}
 
                   {f.keywordAnalysis && (
-                    <div className="bg-slate-950/60 rounded-md p-2 space-y-1">
-                      <p className="text-[10px] font-display text-yellow-400 tracking-wider">🔑 ANÁLISIS DE PALABRAS CLAVE:</p>
+                    <div className="bg-secondary rounded-md p-2 space-y-1">
+                      <p className="text-[10px] font-display text-amber-700 tracking-wider">🔑 ANÁLISIS DE PALABRAS CLAVE:</p>
                       <div className="flex flex-wrap gap-1">
                         {f.keywordAnalysis.expected.map(kw => {
                           const found = f.keywordAnalysis!.found.includes(kw);
@@ -208,8 +208,8 @@ export default function VictoryScreen({ teamName, elapsedSeconds, errorCount, er
                               key={kw}
                               className={`text-[10px] px-2 py-0.5 rounded font-mono ${
                                 found
-                                  ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
-                                  : 'bg-red-500/10 text-red-300 border border-red-500/30 line-through'
+                                  ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
+                                  : 'bg-red-50 text-red-700 border border-red-200 line-through'
                               }`}
                             >
                               {found ? '✓' : '✗'} {kw}
@@ -224,9 +224,9 @@ export default function VictoryScreen({ teamName, elapsedSeconds, errorCount, er
                   )}
 
                   {f.whyTheory && (
-                    <div className="pt-1 border-t border-slate-700">
+                    <div className="pt-1 border-t border-border">
                       <p className="text-[10px] font-display text-muted-foreground tracking-wider mb-1">¿POR QUÉ?</p>
-                      <p className="text-xs text-slate-300 leading-relaxed">{f.whyTheory}</p>
+                      <p className="text-xs text-foreground/80 leading-relaxed">{f.whyTheory}</p>
                     </div>
                   )}
                 </CardContent>
@@ -238,12 +238,12 @@ export default function VictoryScreen({ teamName, elapsedSeconds, errorCount, er
 
       {/* Bitácora de penalidades en vivo (legacy) */}
       {errorLog.length > 0 && (
-        <div className="bg-slate-900 border border-red-500/50 rounded-xl p-4 mb-6 w-full max-w-md max-h-[300px] overflow-y-auto">
-          <p className="text-orange-400 font-display text-sm mb-3 tracking-wider">📋 BITÁCORA DE PENALIDADES EN VIVO</p>
+        <div className="bg-card border border-red-300 rounded-xl p-4 mb-6 w-full max-w-md max-h-[300px] overflow-y-auto shadow-sm">
+          <p className="text-red-600 font-display text-sm mb-3 tracking-wider">📋 BITÁCORA DE PENALIDADES EN VIVO</p>
           <div className="space-y-2">
             {errorLog.map((entry, i) => (
-              <div key={i} className="whitespace-pre-wrap text-xs leading-relaxed text-gray-300 bg-slate-800/80 p-3 rounded border-l-4 border-red-500">
-                <span className="text-red-400 font-bold text-[10px]">🔴 #{i + 1}</span>
+              <div key={i} className="whitespace-pre-wrap text-xs leading-relaxed text-foreground bg-red-50 p-3 rounded border-l-4 border-red-500">
+                <span className="text-red-700 font-bold text-[10px]">🔴 #{i + 1}</span>
                 <div className="mt-1">{entry}</div>
               </div>
             ))}
@@ -254,28 +254,28 @@ export default function VictoryScreen({ teamName, elapsedSeconds, errorCount, er
       {/* Formulario de envío */}
       <div className="w-full max-w-md">
         {!isSent ? (
-          <div className="flex flex-col gap-3 mt-2 border-t border-slate-700 pt-4">
-            <p className="text-sm text-gray-300 mb-1">Para oficializar tu nota con la profesora, envía tu reporte:</p>
+          <div className="flex flex-col gap-3 mt-2 border-t border-border pt-4">
+            <p className="text-sm text-foreground mb-1">Para oficializar tu nota con la profesora, envía tu reporte:</p>
             <input
               type="email"
               placeholder="✉️ Escribe TU correo (Estudiante)..."
               value={studentEmail}
               onChange={(e) => setStudentEmail(e.target.value)}
-              className="w-full p-4 rounded-lg bg-slate-800 border border-slate-600 text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none text-base"
+              className="w-full p-4 rounded-lg bg-card border border-border text-foreground placeholder:text-muted-foreground focus:border-orange focus:outline-none text-base shadow-sm"
             />
             <button
               onClick={handleSilentSend}
               disabled={isSending}
-              className={`w-full py-4 rounded-lg font-bold text-white text-lg transition-colors shadow-lg ${isSending ? 'bg-orange-500 animate-pulse' : 'bg-blue-600 hover:bg-blue-700'}`}
+              className={`w-full py-4 rounded-lg font-bold text-white text-lg transition-colors shadow-md ${isSending ? 'bg-orange animate-pulse' : 'bg-orange hover:bg-orange-glow'}`}
             >
               {isSending ? '⏳ ENVIANDO REPORTE FORENSE...' : '🚀 ENVIAR CALIFICACIÓN OFICIAL'}
             </button>
-            <p className="text-red-400 text-xs text-center font-bold">⚠️ Si no envías tu reporte, tu nota será 0.0</p>
+            <p className="text-red-600 text-xs text-center font-bold">⚠️ Si no envías tu reporte, tu nota será 0.0</p>
           </div>
         ) : (
-          <div className="mt-4 p-5 bg-green-900/40 border border-green-500 rounded-lg text-center animate-fade-in">
-            <p className="text-green-400 font-bold text-xl mb-2">✅ ¡REPORTE ENVIADO EXITOSAMENTE!</p>
-            <p className="text-gray-300 text-sm">Tu reporte forense completo (con todas tus respuestas, justificaciones y palabras clave detectadas) fue enviado a la profesora. Ya puedes cerrar esta ventana.</p>
+          <div className="mt-4 p-5 bg-emerald-50 border border-emerald-200 rounded-lg text-center animate-fade-in">
+            <p className="text-emerald-700 font-bold text-xl mb-2">✅ ¡REPORTE ENVIADO EXITOSAMENTE!</p>
+            <p className="text-emerald-900/80 text-sm">Tu reporte forense completo (con todas tus respuestas, justificaciones y palabras clave detectadas) fue enviado a la profesora. Ya puedes cerrar esta ventana.</p>
           </div>
         )}
       </div>
