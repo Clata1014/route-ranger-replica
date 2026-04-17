@@ -20,8 +20,8 @@ const Crisis3Console = forwardRef<Crisis3Ref>((_, ref) => {
     <div className="space-y-6">
       <div className="space-y-3">
         <div className="flex justify-between items-end">
-          <label className="text-xs text-orange-400 font-mono uppercase tracking-wider">Presupuesto en Góndolas Lujosas</label>
-          <span className="font-display text-2xl text-orange-300">{gondolas}%</span>
+          <label className="text-xs text-orange font-mono uppercase tracking-wider">Presupuesto en Góndolas Lujosas</label>
+          <span className="font-display text-2xl text-orange">{gondolas}%</span>
         </div>
         <input
           type="range"
@@ -30,9 +30,9 @@ const Crisis3Console = forwardRef<Crisis3Ref>((_, ref) => {
           step={5}
           value={gondolas}
           onChange={(e) => setGondolas(Number(e.target.value))}
-          className="w-full h-3 rounded-full appearance-none cursor-pointer bg-slate-700 accent-orange-500"
+          className="w-full h-3 rounded-full appearance-none cursor-pointer bg-secondary accent-orange"
         />
-        <div className="flex justify-between text-[10px] text-slate-500 font-mono">
+        <div className="flex justify-between text-[10px] text-muted-foreground font-mono">
           <span>0% — Austero</span>
           <span>100% — Lujo Total</span>
         </div>
@@ -40,8 +40,8 @@ const Crisis3Console = forwardRef<Crisis3Ref>((_, ref) => {
 
       <div className="space-y-3">
         <div className="flex justify-between items-end">
-          <label className="text-xs text-orange-400 font-mono uppercase tracking-wider">Límite de SKUs / Variedad</label>
-          <span className="font-display text-2xl text-orange-300">{skus.toLocaleString()}</span>
+          <label className="text-xs text-orange font-mono uppercase tracking-wider">Límite de SKUs / Variedad</label>
+          <span className="font-display text-2xl text-orange">{skus.toLocaleString()}</span>
         </div>
         <input
           type="range"
@@ -50,9 +50,9 @@ const Crisis3Console = forwardRef<Crisis3Ref>((_, ref) => {
           step={100}
           value={skus}
           onChange={(e) => setSkus(Number(e.target.value))}
-          className="w-full h-3 rounded-full appearance-none cursor-pointer bg-slate-700 accent-orange-500"
+          className="w-full h-3 rounded-full appearance-none cursor-pointer bg-secondary accent-orange"
         />
-        <div className="flex justify-between text-[10px] text-slate-500 font-mono">
+        <div className="flex justify-between text-[10px] text-muted-foreground font-mono">
           <span>0 — Mínimo</span>
           <span>15,000 — Máxima Variedad</span>
         </div>

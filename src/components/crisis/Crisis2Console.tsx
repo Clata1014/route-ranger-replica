@@ -36,14 +36,14 @@ const Crisis2Console = forwardRef<Crisis2Ref>((_, ref) => {
           onClick={() => toggle(sw.id)}
           className={`w-full flex items-center justify-between p-3 rounded-lg border transition-all ${
             state[sw.id]
-              ? 'bg-green-500/10 border-green-500/50'
-              : 'bg-slate-800 border-slate-700'
+              ? 'bg-emerald-50 border-emerald-300'
+              : 'bg-background border-border'
           }`}
         >
-          <span className={`text-sm font-mono ${state[sw.id] ? 'text-green-300' : 'text-slate-400'}`}>
+          <span className={`text-sm font-mono ${state[sw.id] ? 'text-emerald-800' : 'text-muted-foreground'}`}>
             {sw.label}
           </span>
-          <div className={`w-12 h-6 rounded-full p-0.5 transition-colors ${state[sw.id] ? 'bg-green-500' : 'bg-slate-600'}`}>
+          <div className={`w-12 h-6 rounded-full p-0.5 transition-colors ${state[sw.id] ? 'bg-emerald-500' : 'bg-muted'}`}>
             <div className={`w-5 h-5 rounded-full bg-white shadow transition-transform ${state[sw.id] ? 'translate-x-6' : 'translate-x-0'}`} />
           </div>
         </button>

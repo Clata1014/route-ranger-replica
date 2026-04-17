@@ -23,24 +23,24 @@ const Crisis5Console = forwardRef<Crisis5Ref>((_, ref) => {
 
   return (
     <div className="space-y-4">
-      <div className="bg-black rounded-lg p-4 border border-green-500/30 font-mono">
-        <p className="text-green-500/70 text-xs mb-2">root@cedi-server:~$ identificar_tecnologia</p>
-        <p className="text-green-400 text-xs mb-3">&gt; Ingrese la sigla de 4 letras de la tecnología de lectura por ondas electromagnéticas:</p>
+      <div className="bg-slate-900 rounded-lg p-4 border border-emerald-500/40 font-mono shadow-inner">
+        <p className="text-emerald-400/70 text-xs mb-2">root@cedi-server:~$ identificar_tecnologia</p>
+        <p className="text-emerald-300 text-xs mb-3">&gt; Ingrese la sigla de 4 letras de la tecnología de lectura por ondas electromagnéticas:</p>
         <div className="flex items-center gap-1">
-          <span className="text-green-400">&gt;</span>
+          <span className="text-emerald-300">&gt;</span>
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value.slice(0, 10))}
             maxLength={10}
-            className="bg-transparent border-none outline-none text-green-400 text-lg font-mono uppercase tracking-[0.3em] w-full caret-transparent"
+            className="bg-transparent border-none outline-none text-emerald-300 text-lg font-mono uppercase tracking-[0.3em] w-full caret-transparent"
             placeholder=""
             autoFocus
           />
-          <span className={`text-green-400 text-lg ${blink ? 'opacity-100' : 'opacity-0'}`}>█</span>
+          <span className={`text-emerald-300 text-lg ${blink ? 'opacity-100' : 'opacity-0'}`}>█</span>
         </div>
       </div>
-      <p className="text-[10px] text-slate-600 font-mono text-center">Escribe la sigla y autoriza la intervención</p>
+      <p className="text-[10px] text-muted-foreground font-mono text-center">Escribe la sigla y autoriza la intervención</p>
     </div>
   );
 });
