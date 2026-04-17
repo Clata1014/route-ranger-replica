@@ -4,6 +4,7 @@ import { toast } from 'sonner';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import InstructorOverride from './InstructorOverride';
+import { recordForensic } from '@/lib/forensicLog';
 
 type NodeType = 'fabrica' | 'mayorista' | 'minorista' | 'nube' | 'flete' | 'cliente';
 
