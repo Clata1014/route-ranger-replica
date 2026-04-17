@@ -1,6 +1,7 @@
 import { useState, useRef, ReactNode } from 'react';
 import { speak } from '@/lib/speech';
 import { detectSpam, SPAM_PENALTY } from '@/lib/keywordValidator';
+import { recordForensic, analyzeKeywords } from '@/lib/forensicLog';
 import SignatureCanvas from './SignatureCanvas';
 
 interface CrisisWrapperProps {
@@ -19,6 +20,14 @@ interface CrisisWrapperProps {
   videoUrl2?: string;
   videoLabel1?: string;
   videoLabel2?: string;
+  /** Forensic id (e.g. 'c5_r1'). */
+  forensicId?: string;
+  /** Keywords expected in the gerencial justification for partial credit detection. */
+  expectedKeywords?: string[];
+  /** Plain-language correct answer summary for the report. */
+  correctAnswerSummary?: string;
+  /** Theory shown in the report explaining "why". */
+  whyTheory?: string;
 }
 
 export default function CrisisWrapper({
@@ -37,9 +46,34 @@ export default function CrisisWrapper({
   videoUrl2,
   videoLabel1,
   videoLabel2,
+  forensicId,
+  expectedKeywords,
+  correctAnswerSummary,
+  whyTheory,
 }: CrisisWrapperProps) {
   const [justification, setJustification] = useState('');
   const hasSigRef = useRef(false);
+  const attemptsRef = useRef(0);
+
+  const log = (isCorrect: boolean, gameStateLine: string) => {
+    if (!forensicId) return;
+    const kwAnalysis = expectedKeywords && expectedKeywords.length > 0
+      ? analyzeKeywords(justification, expectedKeywords)
+      : undefined;
+    recordForensic({
+      id: forensicId,
+      kind: 'crisis',
+      phaseLabel: `Crisis ${crisisNumber}: ${title}`,
+      question: dossier,
+      studentAnswer: gameStateLine,
+      correctAnswer: correctAnswerSummary || '(ver justificación teórica)',
+      isCorrect,
+      attempts: attemptsRef.current,
+      justification,
+      keywordAnalysis: kwAnalysis,
+      whyTheory: whyTheory || errorExplanation,
+    });
+  };
 
   const handleAuthorize = () => {
     if (justification.trim().length < 40) {
@@ -47,6 +81,9 @@ export default function CrisisWrapper({
       return;
     }
     if (detectSpam(justification)) {
+      attemptsRef.current += 1;
+      const stateDesc = getGameStateDescription ? getGameStateDescription() : '';
+      log(false, '🚫 SPAM detectado en justificación. ' + stateDesc);
       onError(SPAM_PENALTY, `❌ CRISIS ${crisisNumber}: ${title}\n🚫 INTENTO DE FRAUDE\n✍️ LO QUE TÚ ESCRIBISTE: "${justification.slice(0, 200)}"\n📊 ANÁLISIS: El sistema detectó caracteres repetitivos consecutivos (regex anti-trampa). Esto evidencia relleno de texto sin contenido académico.`);
       return;
     }
@@ -54,12 +91,14 @@ export default function CrisisWrapper({
       alert('⚠️ Debes firmar el canvas como Gerente Responsable antes de autorizar.');
       return;
     }
-    if (validateGame()) {
+    attemptsRef.current += 1;
+    const ok = validateGame();
+    const stateDesc = getGameStateDescription ? getGameStateDescription() : '';
+    log(ok, stateDesc);
+    if (ok) {
       speak(successVoice);
       onSuccess();
     } else {
-      // Build hyper-detailed error
-      const stateDesc = getGameStateDescription ? getGameStateDescription() : '';
       const truncatedText = justification.length > 200 ? justification.slice(0, 200) + '...' : justification;
       const detail = `❌ CRISIS ${crisisNumber}: ${title}\n✍️ TU JUSTIFICACIÓN: "${truncatedText}"\n${stateDesc}`;
       onError(errorExplanation, detail);
