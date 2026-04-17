@@ -6,11 +6,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 const DEFAULT_PASS = '1015';
 
 interface InstructorOverrideProps {
-  /** Render-prop: receives an onDoubleClick handler to attach to any innocuous-looking element. */
   children: (props: { onDoubleClick: () => void }) => ReactNode;
-  /** Called when the correct password is entered. Should clear localStorage for this section + reset state. */
   onUnlock: () => void;
-  /** Optional override password. Defaults to '1015'. */
   password?: string;
 }
 
@@ -39,7 +36,7 @@ export default function InstructorOverride({ children, onUnlock, password = DEFA
       {children({ onDoubleClick: () => { setError(false); setPass(''); setOpen(true); } })}
 
       <Dialog open={open} onOpenChange={(o) => { setOpen(o); if (!o) { setPass(''); setError(false); } }}>
-        <DialogContent className="bg-slate-900 border-slate-700 text-foreground max-w-sm">
+        <DialogContent className="bg-card border-border text-foreground max-w-sm shadow-md">
           <DialogHeader>
             <DialogTitle className="text-orange font-display tracking-wider text-base">
               🛠️ Override de Instructor
@@ -55,10 +52,10 @@ export default function InstructorOverride({ children, onUnlock, password = DEFA
               onChange={(e) => { setPass(e.target.value); setError(false); }}
               placeholder="Ingrese código de autorización..."
               autoFocus
-              className="bg-slate-950 border-slate-700 text-foreground"
+              className="bg-background border-border text-foreground"
             />
             {error && (
-              <p className="text-[11px] text-red-400 font-mono">Clave inválida. Intento registrado.</p>
+              <p className="text-[11px] text-destructive font-mono">Clave inválida. Intento registrado.</p>
             )}
             <button
               type="submit"
