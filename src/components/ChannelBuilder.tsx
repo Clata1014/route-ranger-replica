@@ -321,7 +321,7 @@ export default function ChannelBuilder({ onVictory, startProduct = 0, onProductA
             {currentProduct + 1} / {PRODUCTS.length}
           </span>
           {isLocked && (
-            <span className="ml-auto flex items-center gap-1 text-[10px] text-emerald-400 font-display tracking-wider">
+            <span className="ml-auto flex items-center gap-1 text-[10px] text-emerald-700 font-display tracking-wider">
               <Lock size={10} /> REGISTRADO
             </span>
           )}
@@ -462,11 +462,11 @@ export default function ChannelBuilder({ onVictory, startProduct = 0, onProductA
             {({ onDoubleClick }) => (
               <div
                 onDoubleClick={onDoubleClick}
-                className="flex items-center gap-2 p-3 rounded-xl bg-emerald-500/5 border border-emerald-500/20 select-none"
+                className="flex items-center gap-2 p-3 rounded-xl bg-emerald-50 border border-emerald-200 select-none"
               >
-                <Lock size={14} className="text-emerald-400 shrink-0" />
-                <p className="text-[11px] text-emerald-300/90">
-                  Ruta archivada en la auditoría. Esta sección quedó bloqueada (modo solo lectura).
+                <Lock size={14} className="text-emerald-700 shrink-0" />
+                <p className="text-[11px] text-emerald-900">
+                  🔒 Ruta archivada en la auditoría. Esta sección quedó bloqueada (modo solo lectura).
                 </p>
               </div>
             )}
@@ -476,9 +476,9 @@ export default function ChannelBuilder({ onVictory, startProduct = 0, onProductA
 
       {/* Alert */}
       {alert && (
-        <div className="flex items-center gap-2 mt-3 p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 animate-shake">
-          <AlertTriangle size={14} className="text-amber-400 shrink-0" />
-          <p className="text-xs text-amber-300">{alert}</p>
+        <div className="flex items-center gap-2 mt-3 p-3 rounded-xl bg-amber-50 border border-amber-200 animate-shake">
+          <AlertTriangle size={14} className="text-amber-600 shrink-0" />
+          <p className="text-xs text-amber-800">{alert}</p>
         </div>
       )}
 
@@ -503,7 +503,7 @@ export default function ChannelBuilder({ onVictory, startProduct = 0, onProductA
 
       {/* Sub-point dialog (per-product contextual) */}
       <Dialog open={subPointDialogOpen} onOpenChange={(o) => { if (!o) { setSubPointDialogOpen(false); setPendingNode(null); } }}>
-        <DialogContent className="bg-slate-900 border-orange/40 text-foreground">
+        <DialogContent className="bg-card border-orange/40 text-foreground shadow-md">
           <DialogHeader>
             <DialogTitle className="text-orange font-display tracking-wider">{product.subPointTitle}</DialogTitle>
             <DialogDescription className="text-muted-foreground">
@@ -515,7 +515,7 @@ export default function ChannelBuilder({ onVictory, startProduct = 0, onProductA
               <button
                 key={opt.id}
                 onClick={() => confirmSubPoint(opt)}
-                className="flex flex-col items-center gap-2 p-5 rounded-xl border border-border bg-secondary/40 hover:border-orange hover:shadow-lg hover:shadow-orange/20 active:scale-95 transition-all"
+                className="flex flex-col items-center gap-2 p-5 rounded-xl border border-border bg-background hover:border-orange hover:shadow-lg hover:shadow-orange/20 active:scale-95 transition-all"
               >
                 <span className="text-4xl">{opt.emoji}</span>
                 <span className="font-display text-sm text-foreground">{opt.label}</span>
