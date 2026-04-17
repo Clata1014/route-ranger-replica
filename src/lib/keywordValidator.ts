@@ -8,14 +8,14 @@ export function detectSpam(text: string): boolean {
 export const SPAM_PENALTY = '❌ INTENTO DE FRAUDE DETECTADO: El sistema identificó texto de relleno o letras repetidas sin sentido. ¡Se te sumó un error disciplinario, redacta una justificación seria!';
 
 interface KeywordRule {
-  groups: string[][];           // each sub-array requires at least 1 match
-  allKeywords: string[];        // flat list of all keywords for NLP analysis
+  groups: string[][];
+  allKeywords: string[];
   penaltyMessage: string;
   theory: string;
 }
 
 export const PRODUCT_KEYWORDS: Record<number, KeywordRule> = {
-  0: { // Papel Higiénico
+  0: {
     groups: [
       ['volumen', 'aire', 'bulto', 'espacio'],
       ['flete', 'costo', 'transporte', 'fraccionar', 'mayorista', 'diluir'],
@@ -24,7 +24,7 @@ export const PRODUCT_KEYWORDS: Record<number, KeywordRule> = {
     penaltyMessage: '❌ REPORTE GERENCIAL RECHAZADO: Tu justificación carece de rigor técnico. Olvidaste mencionar que el papel ocupa mucho VOLUMEN (transportas aire) lo que encarece el FLETE. Es obligatorio usar un MAYORISTA porque las tiendas pequeñas no tienen 50 millones para comprar una tractomula entera ni una megabodega para guardarla. El mayorista absorbe el costo y FRACCIONA la carga. ¡Se ha sumado un error a tu nota final, redacta usando lenguaje logístico!',
     theory: 'El papel higiénico es 90% aire. Su enorme VOLUMEN encarece el FLETE. Se necesita un MAYORISTA que compre tractomulas completas y FRACCIONE la carga en lotes pequeños para las tiendas, diluyendo el costo logístico por unidad.',
   },
-  1: { // Celulares
+  1: {
     groups: [
       ['valor', 'robo', 'seguridad', 'riesgo', 'corto', 'exclusivo'],
     ],
@@ -32,7 +32,7 @@ export const PRODUCT_KEYWORDS: Record<number, KeywordRule> = {
     penaltyMessage: '❌ REPORTE RECHAZADO: Un gerente evalúa riesgos. El altísimo VALOR del producto exige canal corto para mitigar el RIESGO de ROBO en bodegas masivas. ¡Tu nota bajó, corrige el texto!',
     theory: 'Los celulares gama alta tienen altísimo VALOR concentrado en mínimo volumen, lo que genera alto RIESGO de ROBO. Se requiere canal CORTO y EXCLUSIVO (fábrica ➔ vitrina) para minimizar la exposición en bodegas masivas y proteger la SEGURIDAD del inventario.',
   },
-  2: { // Producto Digital / E-commerce
+  2: {
     groups: [
       ['internet', 'web', 'nube', 'redes', 'instagram', 'digital', 'software', 'canales'],
       ['directo', 'sin intermediarios'],
@@ -57,7 +57,6 @@ export function analyzeKeywords(text: string, productIndex: number): NLPAnalysis
   const found = rule.allKeywords.filter(kw => lower.includes(kw));
   const missing = rule.allKeywords.filter(kw => !lower.includes(kw));
 
-  // Check all groups have at least one match
   const passed = rule.groups.every(group => group.some(kw => lower.includes(kw)));
 
   return { found, missing, passed };
@@ -70,8 +69,7 @@ export function buildNLPErrorDetail(
 ): string | null {
   const lower = text.toLowerCase();
 
-  // Anti-spam first
-  if (detectSpam(lower)) return null; // spam handled separately
+  if (detectSpam(lower)) return null;
 
   const analysis = analyzeKeywords(text, productIndex);
   if (!analysis) return null;
@@ -86,16 +84,15 @@ export function buildNLPErrorDetail(
 export function validateKeywords(text: string, productIndex: number): string | null {
   const lower = text.toLowerCase();
 
-  // Anti-spam first
   if (detectSpam(lower)) return SPAM_PENALTY;
 
   const rule = PRODUCT_KEYWORDS[productIndex];
-  if (!rule) return null; // no keyword rule for this product
+  if (!rule) return null;
 
   for (const group of rule.groups) {
     const found = group.some(kw => lower.includes(kw));
     if (!found) return rule.penaltyMessage;
   }
 
-  return null; // passed
+  return null;
 }
