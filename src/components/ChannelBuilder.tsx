@@ -273,6 +273,23 @@ export default function ChannelBuilder({ onVictory, startProduct = 0, onProductA
     };
     saveAuditEntry(entry);
 
+    // Forensic global log (cross-section report)
+    const studentRouteStr = route.map((n, i) => {
+      const sp = i > 0 ? subPoints[i] : null;
+      return (sp ? `[${sp.label}] ` : '') + n.label;
+    }).join(' → ');
+    const correctRouteStr = correctRouteData.map(n => n.label).join(' → ');
+    recordForensic({
+      id: `c4_p${currentProduct}`,
+      kind: 'channel_builder',
+      phaseLabel: `Taller P${currentProduct + 1}: ${product.title}`,
+      question: product.description,
+      studentAnswer: studentRouteStr || '(vacío)',
+      correctAnswer: correctRouteStr,
+      isCorrect,
+      whyTheory: product.whyTheory,
+    });
+
     toast.success('✅ Estrategia registrada. Avanzando...', {
       description: 'Tu decisión quedó archivada en la auditoría.',
     });
