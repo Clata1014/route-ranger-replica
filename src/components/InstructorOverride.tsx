@@ -3,23 +3,25 @@ import { toast } from 'sonner';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 
-const ADMIN_PASS = '1015';
+const DEFAULT_PASS = '1015';
 
 interface InstructorOverrideProps {
   /** Render-prop: receives an onDoubleClick handler to attach to any innocuous-looking element. */
   children: (props: { onDoubleClick: () => void }) => ReactNode;
   /** Called when the correct password is entered. Should clear localStorage for this section + reset state. */
   onUnlock: () => void;
+  /** Optional override password. Defaults to '1015'. */
+  password?: string;
 }
 
-export default function InstructorOverride({ children, onUnlock }: InstructorOverrideProps) {
+export default function InstructorOverride({ children, onUnlock, password = DEFAULT_PASS }: InstructorOverrideProps) {
   const [open, setOpen] = useState(false);
   const [pass, setPass] = useState('');
   const [error, setError] = useState(false);
 
   const handleSubmit = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
-    if (pass === ADMIN_PASS) {
+    if (pass === password) {
       onUnlock();
       setOpen(false);
       setPass('');
