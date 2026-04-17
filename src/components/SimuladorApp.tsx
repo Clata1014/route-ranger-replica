@@ -373,6 +373,10 @@ export default function SimuladorApp() {
         {phase === 'c5_r6' && (
           <CrisisWrapper
             crisisNumber={6}
+            forensicId="c5_r6"
+            expectedKeywords={['picking', 'packing', 'recolectar', 'empacar', 'caminar', 'estación', 'caja', 'cinta']}
+            correctAnswerSummary="Gemelo A = PICKING (recolectar caminando), Gemelo B = PACKING (empacar fijo)"
+            whyTheory="PICKING (Pick = Recoger) es el operario que CAMINA por la bodega recolectando artículos. PACKING (Pack = Empacar) es la estación FIJA donde se arma la caja con burbujas y cinta. Cruzarlos genera devoluciones millonarias."
             icon="🚨"
             title="EL ACERTIJO DE LOS GEMELOS OPERATIVOS — Picking vs Packing"
             dossier={'¡Alto ahí, Gerente! Para abrir los portones del CEDI, despachar los camiones y graduarte, el auditor jefe te exige resolver el último gran acertijo para demostrar que dominas el idioma de la bodega.'}
