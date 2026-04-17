@@ -191,6 +191,16 @@ export default function ChannelBuilder({ onVictory, startProduct = 0, onProductA
     setSubPoints([]);
   };
 
+  // Instructor backdoor: unlock ONLY this product, leave others intact
+  const unlockThisSection = () => {
+    const remaining = loadAudit().filter(e => e.productIdx !== currentProduct);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(remaining));
+    setRoute([]);
+    setSubPoints([]);
+    setTextInput('');
+    setAlert('');
+  };
+
   // Submit free text → resolve node → first node = direct push; rest = open sub-point dialog
   const submitTextNode = () => {
     if (isLocked) return;
