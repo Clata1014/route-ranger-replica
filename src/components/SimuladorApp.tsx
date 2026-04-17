@@ -157,6 +157,7 @@ export default function SimuladorApp() {
         {phase === 'c1_channel' && (
           <ChannelQuestion
             icon="truck"
+            forensicId="c1_channel"
             nativeVideoUrl="/videos/Canal_Logistico_con_Intermediario.mp4"
             title="📦 CASO 1: CONSUMO MASIVO — POSTOBÓN"
             description="Las tractomulas de Postobón salen de la fábrica con millones de gaseosas. El objetivo es llegar a miles de tienditas de barrio, pero las tractomulas gigantes NO CABEN por esas calles estrechas."
@@ -171,6 +172,7 @@ export default function SimuladorApp() {
         )}
         {phase === 'c1_pins' && (
           <PinEntry
+            forensicId="c1_pins"
             title="📦 CASO 1: POSTOBÓN"
             subtitle="Ruta Física — Canal Largo"
             pinSequence={[
@@ -187,6 +189,7 @@ export default function SimuladorApp() {
         {phase === 'c2_channel' && (
           <ChannelQuestion
             icon="store"
+            forensicId="c2_channel"
             nativeVideoUrl="/videos/Optimizacion_Logistica_Hard_Discount.mp4"
             title="🛒 CASO 2: HARD DISCOUNT — D1 / ARA"
             description="Para competir con precios bajos, debemos optimizar la cadena. Decidimos vender los productos directamente desde su caja de cartón corrugado y eliminar comisiones de terceros."
@@ -201,6 +204,7 @@ export default function SimuladorApp() {
         )}
         {phase === 'c2_pins' && (
           <PinEntry
+            forensicId="c2_pins"
             title="🛒 CASO 2: HARD DISCOUNT"
             subtitle="Ruta Física — Canal Corto"
             pinSequence={[
@@ -216,6 +220,7 @@ export default function SimuladorApp() {
         {phase === 'c3_channel' && (
           <ChannelQuestion
             icon="bike"
+            forensicId="c3_channel"
             nativeVideoUrl="/videos/Creacion_de_Canal_Digital_y_Video.mp4"
             title="💻 CASO 3: PRODUCTO DIGITAL Y E-COMMERCE"
             description="El cliente exige inmediatez cuando pide sus productos por canales digitales (como una página web o Instagram). El reto logístico es entregar el producto de forma instantánea a través de internet, sin usar cajas, bodegas físicas ni camiones de transporte."
@@ -230,6 +235,7 @@ export default function SimuladorApp() {
         )}
         {phase === 'c3_pins' && (
           <PinEntry
+            forensicId="c3_pins"
             title="💻 CASO 3: PRODUCTO DIGITAL"
             subtitle="Ruta Digital — Canal Directo"
             pinSequence={[
