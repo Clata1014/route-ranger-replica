@@ -187,9 +187,16 @@ const Crisis1Console = forwardRef<Crisis1Ref>((_, ref) => {
           [🗑 LIMPIAR FLUJO]
         </button>
         {locked && (
-          <span className="text-[10px] font-mono text-red-400 uppercase tracking-widest">
-            🔒 Registrado — solo lectura
-          </span>
+          <InstructorOverride onUnlock={unlockSection}>
+            {({ onDoubleClick }) => (
+              <span
+                onDoubleClick={onDoubleClick}
+                className="text-[10px] font-mono text-red-400 uppercase tracking-widest select-none"
+              >
+                🔒 Registrado — solo lectura
+              </span>
+            )}
+          </InstructorOverride>
         )}
       </div>
 
