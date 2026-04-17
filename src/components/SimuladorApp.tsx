@@ -263,6 +263,10 @@ export default function SimuladorApp() {
         {phase === 'c5_r1' && (
           <CrisisWrapper
             crisisNumber={1}
+            forensicId="c5_r1"
+            expectedKeywords={['recepción', 'clasificación', 'picking', 'packing', 'despacho', 'wms', 'cadena de frío', 'perecederos']}
+            correctAnswerSummary="Recepción → Clasificación → Picking y Packing → Despacho (todos con WMS)"
+            whyTheory="El flujo lógico de un CEDI es estricto: Recibes, acomodas, alistas y despachas. La operaria del video usaba planilla de papel — esa es la TRAMPA. En logística de alto volumen, copiar lo que ves sin analizar genera inventario fantasma. El WMS (escáner en tiempo real) es la única respuesta gerencial correcta."
             icon="🚨"
             title="COLAPSO DE PERECEDEROS — Flujo del CEDI"
             dossier={'¡Alerta Gerencial! Son las 3:00 AM. Acaban de llegar 15 tractomulas con flores y vacunas (perecederos críticos). Los operarios son nuevos, el muelle es un caos y están cruzando los procesos. Si la mercancía pierde la cadena de frío, quebramos.\n\nToma el control del panel WMS y organiza el flujo físico de la mercancía en su orden lógico estricto. Un error aquí significa millones en pérdidas y vidas en riesgo.'}
