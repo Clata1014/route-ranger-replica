@@ -27,17 +27,41 @@ export default function PinEntry({
   errorVoice,
   onComplete,
   onError,
+  forensicId,
 }: PinEntryProps) {
   const [currentIdx, setCurrentIdx] = useState(0);
   const [input, setInput] = useState('');
   const [feedback, setFeedback] = useState<string | null>(null);
   const [disabled, setDisabled] = useState(false);
+  const attemptsRef = useRef<number[]>(pinSequence.map(() => 0));
+  const wrongAnswersRef = useRef<string[]>(pinSequence.map(() => ''));
 
   const currentPin = pinSequence[currentIdx];
   const progress = currentIdx + 1;
 
+  const logSequence = (finalIsCorrect: boolean) => {
+    if (!forensicId) return;
+    const correctSeq = pinSequence.map(p => p.pin).join(' → ');
+    const wrongSummary = wrongAnswersRef.current
+      .map((w, i) => w ? `Paso ${i + 1}: probó "${w}"` : '')
+      .filter(Boolean)
+      .join(' | ');
+    const totalAttempts = attemptsRef.current.reduce((a, b) => a + b, 0);
+    recordForensic({
+      id: forensicId,
+      kind: 'pin_entry',
+      phaseLabel: title + ' — ' + subtitle,
+      question: `Secuencia de PINs (${pinSequence.length} pasos)`,
+      studentAnswer: wrongSummary || 'Ingresó todos los PINs correctos.',
+      correctAnswer: correctSeq,
+      isCorrect: finalIsCorrect,
+      attempts: totalAttempts,
+    });
+  };
+
   const handleSubmit = () => {
     if (!input.trim() || disabled) return;
+    attemptsRef.current[currentIdx] += 1;
 
     if (input.trim() === currentPin.pin) {
       setDisabled(true);
@@ -52,10 +76,13 @@ export default function PinEntry({
         if (currentIdx < pinSequence.length - 1) {
           setCurrentIdx(prev => prev + 1);
         } else {
+          logSequence(true);
           onComplete();
         }
       }, 2500);
     } else {
+      wrongAnswersRef.current[currentIdx] = input.trim();
+      logSequence(false);
       setInput('');
       onError(errorVoice);
     }
