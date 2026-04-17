@@ -135,21 +135,21 @@ export default function SimuladorApp() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-900 text-slate-100">
-      <header className="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-700/50 px-4 py-3 flex items-center justify-between">
+    <div className="min-h-screen flex flex-col bg-background text-foreground">
+      <header className="sticky top-0 z-40 bg-card/90 backdrop-blur-md border-b border-border px-4 py-3 flex items-center justify-between shadow-sm">
         <div className="flex items-center gap-2">
-          <button onClick={goBack} className="p-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-slate-100 transition-colors border border-slate-700">
+          <button onClick={goBack} className="p-1.5 rounded-lg bg-secondary text-muted-foreground hover:text-foreground transition-colors border border-border">
             <ArrowLeft size={18} />
           </button>
-          <span className="text-xs text-slate-500 font-mono truncate max-w-[120px]">{teamName}</span>
+          <span className="text-xs text-muted-foreground font-mono truncate max-w-[120px]">{teamName}</span>
         </div>
         <div onClick={handleTimerClick} className="cursor-pointer">
           <Timer startTime={startTime} />
         </div>
       </header>
 
-      <div className="h-1 bg-slate-800">
-        <div className="h-full bg-gradient-to-r from-orange-600 to-red-500 transition-all duration-500" style={{ width: `${progress}%` }} />
+      <div className="h-1 bg-secondary">
+        <div className="h-full bg-gradient-to-r from-orange to-orange-glow transition-all duration-500" style={{ width: `${progress}%` }} />
       </div>
 
       <main className="flex-1 flex flex-col p-4 max-w-lg mx-auto w-full">

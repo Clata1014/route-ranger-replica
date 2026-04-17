@@ -69,7 +69,7 @@ export default function SignatureCanvas({ onSignatureChange }: SignatureCanvasPr
       <label className="text-xs text-orange-400 font-mono uppercase tracking-wider">✍️ Firma del Gerente Responsable</label>
       <canvas
         ref={canvasRef}
-        className="w-full h-24 bg-slate-800 border border-orange-500/30 rounded-lg cursor-crosshair touch-none"
+        className="w-full h-24 bg-background border border-border rounded-lg cursor-crosshair touch-none shadow-inner"
         onMouseDown={startDraw}
         onMouseMove={draw}
         onMouseUp={stopDraw}
@@ -78,7 +78,7 @@ export default function SignatureCanvas({ onSignatureChange }: SignatureCanvasPr
         onTouchMove={draw}
         onTouchEnd={stopDraw}
       />
-      <button onClick={clear} className="text-xs text-slate-500 hover:text-slate-300 font-mono transition-colors">
+      <button onClick={clear} className="text-xs text-muted-foreground hover:text-foreground font-mono transition-colors">
         [LIMPIAR FIRMA]
       </button>
     </div>

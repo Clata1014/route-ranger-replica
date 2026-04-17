@@ -18,13 +18,13 @@ const Crisis4Console = forwardRef<Crisis4Ref>((_, ref) => {
   return (
     <div className="space-y-6">
       <div className="text-center space-y-2">
-        <p className="text-xs text-orange-400 font-mono uppercase tracking-widest">Escáner de Costos — Última Milla</p>
-        <div className="font-display text-7xl text-orange-400 tabular-nums" style={{
-          textShadow: '0 0 30px rgba(249,115,22,0.5), 0 0 60px rgba(249,115,22,0.2)',
+        <p className="text-xs text-orange font-mono uppercase tracking-widest">Escáner de Costos — Última Milla</p>
+        <div className="font-display text-7xl text-orange tabular-nums" style={{
+          textShadow: '0 0 30px rgba(249,115,22,0.35), 0 0 60px rgba(249,115,22,0.15)',
         }}>
           {value}%
         </div>
-        <p className="text-[10px] text-slate-500 font-mono">% del costo total logístico</p>
+        <p className="text-[10px] text-muted-foreground font-mono">% del costo total logístico</p>
       </div>
 
       <input
@@ -34,9 +34,9 @@ const Crisis4Console = forwardRef<Crisis4Ref>((_, ref) => {
         step={1}
         value={value}
         onChange={(e) => setValue(Number(e.target.value))}
-        className="w-full h-4 rounded-full appearance-none cursor-pointer bg-slate-700 accent-orange-500"
+        className="w-full h-4 rounded-full appearance-none cursor-pointer bg-secondary accent-orange"
       />
-      <div className="flex justify-between text-[10px] text-slate-500 font-mono">
+      <div className="flex justify-between text-[10px] text-muted-foreground font-mono">
         <span>0%</span>
         <span>50%</span>
         <span>100%</span>

@@ -20,13 +20,9 @@ interface CrisisWrapperProps {
   videoUrl2?: string;
   videoLabel1?: string;
   videoLabel2?: string;
-  /** Forensic id (e.g. 'c5_r1'). */
   forensicId?: string;
-  /** Keywords expected in the gerencial justification for partial credit detection. */
   expectedKeywords?: string[];
-  /** Plain-language correct answer summary for the report. */
   correctAnswerSummary?: string;
-  /** Theory shown in the report explaining "why". */
   whyTheory?: string;
 }
 
@@ -109,83 +105,83 @@ export default function CrisisWrapper({
     <div className="animate-fade-in space-y-5 pb-8">
       {/* Crisis header */}
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-lg bg-red-500/20 border border-red-500/40 flex items-center justify-center text-xl">
+        <div className="w-10 h-10 rounded-lg bg-destructive/10 border border-destructive/30 flex items-center justify-center text-xl">
           {icon}
         </div>
         <div>
-          <p className="text-[10px] font-mono text-red-400 uppercase tracking-widest">Crisis {crisisNumber} de 6</p>
-          <h2 className="font-display text-sm text-orange-400 leading-tight">{title}</h2>
+          <p className="text-[10px] font-mono text-destructive uppercase tracking-widest">Crisis {crisisNumber} de 6</p>
+          <h2 className="font-display text-sm text-orange leading-tight">{title}</h2>
         </div>
       </div>
 
       {/* Dossier */}
-      <div className="bg-slate-800/80 border border-red-500/30 rounded-xl p-4 space-y-3">
+      <div className="bg-card border border-destructive/30 rounded-xl p-4 space-y-3 shadow-sm">
         <div className="flex items-center gap-2 mb-1">
-          <span className="text-red-500 animate-pulse text-lg">●</span>
-          <span className="text-[10px] font-mono text-red-400 uppercase tracking-widest">Dossier de Crisis — Clasificado</span>
+          <span className="text-destructive animate-pulse text-lg">●</span>
+          <span className="text-[10px] font-mono text-destructive uppercase tracking-widest">Dossier de Crisis — Clasificado</span>
         </div>
-        <p className="text-slate-300 text-sm leading-relaxed whitespace-pre-line">{dossier}</p>
+        <p className="text-foreground text-sm leading-relaxed whitespace-pre-line">{dossier}</p>
       </div>
 
       {/* Media */}
       {videoUrl2 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div className="border-2 border-dashed border-orange-500/50 bg-slate-800 h-56 rounded-xl shadow-inner overflow-hidden relative">
+          <div className="border-2 border-dashed border-orange/40 bg-card h-56 rounded-xl shadow-sm overflow-hidden relative">
             <video src={videoUrl} autoPlay loop muted playsInline className="w-full h-full object-cover" />
             {videoLabel1 && (
-              <span className="absolute top-2 left-2 bg-slate-900/80 text-orange-300 text-[10px] font-mono uppercase tracking-widest px-2 py-1 rounded">
+              <span className="absolute top-2 left-2 bg-card/90 text-orange text-[10px] font-mono uppercase tracking-widest px-2 py-1 rounded border border-border">
                 {videoLabel1}
               </span>
             )}
           </div>
-          <div className="border-2 border-dashed border-cyan-500/50 bg-slate-800 h-56 rounded-xl shadow-inner overflow-hidden relative">
+          <div className="border-2 border-dashed border-cyan-400/50 bg-card h-56 rounded-xl shadow-sm overflow-hidden relative">
             <video src={videoUrl2} autoPlay loop muted playsInline className="w-full h-full object-cover" />
             {videoLabel2 && (
-              <span className="absolute top-2 left-2 bg-slate-900/80 text-cyan-300 text-[10px] font-mono uppercase tracking-widest px-2 py-1 rounded">
+              <span className="absolute top-2 left-2 bg-card/90 text-cyan-700 text-[10px] font-mono uppercase tracking-widest px-2 py-1 rounded border border-border">
                 {videoLabel2}
               </span>
             )}
           </div>
         </div>
       ) : (
-        <div className="border-2 border-dashed border-orange-500/50 bg-slate-800 h-56 flex flex-col items-center justify-center text-orange-400 rounded-xl shadow-inner text-center overflow-hidden">
+        <div className="border-2 border-dashed border-orange/40 bg-card h-56 flex flex-col items-center justify-center text-orange rounded-xl shadow-sm text-center overflow-hidden">
           {videoUrl ? (
             <video src={videoUrl} autoPlay loop muted playsInline className="w-full h-full object-cover rounded-lg" />
           ) : (
             <div className="p-4">
               🎬 [ZONA MULTIMEDIA DE LA PROFESORA]
-              <span className="block text-sm text-slate-400 mt-2">Espacio reservado para inyectar foto/video real de la operación</span>
+              <span className="block text-sm text-muted-foreground mt-2">Espacio reservado para inyectar foto/video real de la operación</span>
             </div>
           )}
         </div>
       )}
 
       {/* Interactive console */}
-      <div className="bg-slate-800/60 border border-orange-500/20 rounded-xl p-4">
-        <p className="text-[10px] font-mono text-green-400 uppercase tracking-widest mb-4">▶ Consola Interactiva</p>
+      <div className="bg-card border border-orange/20 rounded-xl p-4 shadow-sm">
+        <p className="text-[10px] font-mono text-emerald-600 uppercase tracking-widest mb-4">▶ Consola Interactiva</p>
         {children}
       </div>
 
       {/* Triple Lock */}
-      <div className="bg-slate-900/80 border border-orange-500/30 rounded-xl p-4 space-y-4">
-        <p className="text-[10px] font-mono text-yellow-400 uppercase tracking-widest">🔒 Triple Candado de Autorización</p>
+      <div className="bg-card border border-orange/30 rounded-xl p-4 space-y-4 shadow-sm">
+        <p className="text-[10px] font-mono text-amber-600 uppercase tracking-widest">🔒 Triple Candado de Autorización</p>
 
         <div className="space-y-1">
-          <label className="text-xs text-orange-400 font-mono uppercase tracking-wider">📝 Justificación Gerencial (mín. 40 caracteres)</label>
+          <label className="text-xs text-orange font-mono uppercase tracking-wider">📝 Justificación Gerencial (mín. 40 caracteres)</label>
           <textarea
             value={justification}
             onChange={(e) => setJustification(e.target.value)}
             placeholder="Explica tu razonamiento profesional para esta decisión operativa..."
-            className="w-full min-h-[80px] bg-slate-800 border border-orange-500/30 rounded-lg p-3 text-sm text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-orange-500 font-mono resize-none"
+            className="w-full min-h-[80px] bg-background border border-border rounded-lg p-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-orange font-mono resize-none"
           />
-          <p className="text-[10px] text-slate-600 font-mono text-right">{justification.trim().length}/40 mín.</p>
+          <p className="text-[10px] text-muted-foreground font-mono text-right">{justification.trim().length}/40 mín.</p>
         </div>
 
         <SignatureCanvas onSignatureChange={(has) => { hasSigRef.current = has; }} />
 
         <button
           onClick={handleAuthorize}
-          className="w-full py-3 rounded-xl font-display text-sm uppercase tracking-wider bg-gradient-to-r from-orange-600 to-red-600 text-white hover:from-orange-500 hover:to-red-500 transition-all shadow-lg shadow-orange-500/20 active:scale-[0.98]"
+          className="w-full py-3 rounded-xl font-display text-sm uppercase tracking-wider bg-gradient-to-r from-orange to-orange-glow text-primary-foreground hover:shadow-lg hover:shadow-orange/30 transition-all active:scale-[0.98]"
         >
           ⚡ AUTORIZAR INTERVENCIÓN
         </button>

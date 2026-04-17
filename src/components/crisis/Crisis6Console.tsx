@@ -71,11 +71,11 @@ const Crisis6Console = forwardRef<Crisis6Ref>((_, ref) => {
   return (
     <div className="space-y-4">
       {/* Gemelo A — riddle only, no spoiler labels */}
-      <div className="bg-slate-800 border border-orange-500/30 rounded-xl p-5 shadow-lg">
-        <div className="text-orange-300 text-lg font-bold mb-2">🧭 Gemelo A</div>
-        <p className="text-slate-300 text-sm leading-relaxed mb-4">
+      <div className="bg-card border border-orange/30 rounded-xl p-5 shadow-sm">
+        <div className="text-orange text-lg font-bold mb-2">🧭 Gemelo A</div>
+        <p className="text-foreground text-sm leading-relaxed mb-4">
           «Soy el viajero explorador. Camino kilómetros por los pasillos con un escáner y un carrito.
-          Mi única misión es ir a las estanterías a <span className="text-orange-400 font-bold">BUSCAR y RECOLECTAR</span> los
+          Mi única misión es ir a las estanterías a <span className="text-orange font-bold">BUSCAR y RECOLECTAR</span> los
           productos exactos que pide el cliente. ¿Quién soy?»
         </p>
         <Input
@@ -85,16 +85,16 @@ const Crisis6Console = forwardRef<Crisis6Ref>((_, ref) => {
           placeholder="Escribe de qué proceso habla el acertijo y presiona Enter..."
           disabled={locked}
           readOnly={locked}
-          className="bg-slate-900 border-slate-600 text-orange-200 placeholder:text-slate-500 font-mono text-sm focus-visible:ring-orange-500"
+          className="bg-background border-border text-foreground placeholder:text-muted-foreground font-mono text-sm focus-visible:ring-orange"
         />
       </div>
 
       {/* Gemelo B */}
-      <div className="bg-slate-800 border border-cyan-500/30 rounded-xl p-5 shadow-lg">
-        <div className="text-cyan-300 text-lg font-bold mb-2">📦 Gemelo B</div>
-        <p className="text-slate-300 text-sm leading-relaxed mb-4">
+      <div className="bg-card border border-cyan-400/40 rounded-xl p-5 shadow-sm">
+        <div className="text-cyan-700 text-lg font-bold mb-2">📦 Gemelo B</div>
+        <p className="text-foreground text-sm leading-relaxed mb-4">
           «Soy el protector estático. Me quedo quieto en mi mesa de trabajo. Tengo cajas, plástico burbuja
-          y cinta adhesiva. Mi misión es <span className="text-cyan-400 font-bold">EMPACAR</span> el producto que me traen, sellarlo
+          y cinta adhesiva. Mi misión es <span className="text-cyan-700 font-bold">EMPACAR</span> el producto que me traen, sellarlo
           y etiquetarlo para el rudo viaje en camión. ¿Quién soy?»
         </p>
         <Input
@@ -104,7 +104,7 @@ const Crisis6Console = forwardRef<Crisis6Ref>((_, ref) => {
           placeholder="Escribe de qué proceso habla el acertijo y presiona Enter..."
           disabled={locked}
           readOnly={locked}
-          className="bg-slate-900 border-slate-600 text-cyan-200 placeholder:text-slate-500 font-mono text-sm focus-visible:ring-cyan-500"
+          className="bg-background border-border text-foreground placeholder:text-muted-foreground font-mono text-sm focus-visible:ring-cyan-500"
         />
       </div>
 
@@ -114,10 +114,10 @@ const Crisis6Console = forwardRef<Crisis6Ref>((_, ref) => {
           {({ onDoubleClick }) => (
             <div
               onDoubleClick={onDoubleClick}
-              className="flex items-center gap-2 p-3 rounded-xl bg-emerald-500/5 border border-emerald-500/20 select-none"
+              className="flex items-center gap-2 p-3 rounded-xl bg-emerald-50 border border-emerald-200 select-none"
             >
-              <Lock size={14} className="text-emerald-400 shrink-0" />
-              <p className="text-[11px] text-emerald-300/90">
+              <Lock size={14} className="text-emerald-700 shrink-0" />
+              <p className="text-[11px] text-emerald-900">
                 🔒 Ruta archivada en la auditoría. Esta sección quedó bloqueada (modo solo lectura).
               </p>
             </div>

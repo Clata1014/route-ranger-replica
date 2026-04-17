@@ -134,24 +134,24 @@ const Crisis1Console = forwardRef<Crisis1Ref>((_, ref) => {
   return (
     <div className="space-y-4">
       {/* Canvas / lienzo */}
-      <div className="bg-slate-900 rounded-lg p-4 min-h-[90px] border border-slate-700">
+      <div className="bg-background rounded-lg p-4 min-h-[90px] border border-border">
         {nodes.length === 0 ? (
-          <p className="text-slate-600 text-xs font-mono text-center">
+          <p className="text-muted-foreground text-xs font-mono text-center">
             [ Lienzo vacío — escribe abajo la etapa del proceso del CEDI ]
           </p>
         ) : (
           <div className="flex flex-wrap items-center gap-2">
             {nodes.map((n, i) => (
               <span key={i} className="flex items-center gap-2">
-                <span className={`relative bg-orange-500/20 border rounded-md px-3 py-2 text-xs font-mono ${
-                  n.recognized ? 'border-orange-500/40 text-orange-300' : 'border-red-500/50 text-red-300'
+                <span className={`relative bg-orange/10 border rounded-md px-3 py-2 text-xs font-mono ${
+                  n.recognized ? 'border-orange/40 text-orange' : 'border-destructive/50 text-destructive'
                 }`}>
                   <span className="mr-1">{n.emoji}</span>{n.label}
-                  <span className="absolute -top-2 -right-2 bg-slate-800 border border-slate-600 rounded-full px-1.5 py-0.5 text-[10px]">
+                  <span className="absolute -top-2 -right-2 bg-card border border-border rounded-full px-1.5 py-0.5 text-[10px]">
                     {n.method === 'WMS' ? '📱' : '📋'}
                   </span>
                 </span>
-                {i < nodes.length - 1 && <span className="text-green-400 text-lg font-bold">➔</span>}
+                {i < nodes.length - 1 && <span className="text-emerald-600 text-lg font-bold">➔</span>}
               </span>
             ))}
           </div>
@@ -167,12 +167,12 @@ const Crisis1Console = forwardRef<Crisis1Ref>((_, ref) => {
           placeholder="Escribe la etapa del proceso del CEDI y presiona Enter..."
           disabled={locked}
           readOnly={locked}
-          className="bg-slate-900 border-slate-700 text-orange-200 placeholder:text-slate-500 font-mono text-xs"
+          className="bg-background border-border text-foreground placeholder:text-muted-foreground font-mono text-xs focus-visible:ring-orange"
         />
         <Button
           onClick={tryAdd}
           disabled={locked || !text.trim()}
-          className="bg-orange-500 hover:bg-orange-600 text-white font-mono text-xs uppercase tracking-wider"
+          className="bg-orange hover:bg-orange-glow text-primary-foreground font-mono text-xs uppercase tracking-wider"
         >
           Agregar
         </Button>
@@ -182,7 +182,7 @@ const Crisis1Console = forwardRef<Crisis1Ref>((_, ref) => {
         <button
           onClick={clear}
           disabled={locked}
-          className="text-xs text-slate-500 hover:text-slate-300 font-mono transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+          className="text-xs text-muted-foreground hover:text-foreground font-mono transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
         >
           [🗑 LIMPIAR FLUJO]
         </button>
@@ -191,7 +191,7 @@ const Crisis1Console = forwardRef<Crisis1Ref>((_, ref) => {
             {({ onDoubleClick }) => (
               <span
                 onDoubleClick={onDoubleClick}
-                className="text-[10px] font-mono text-red-400 uppercase tracking-widest select-none"
+                className="text-[10px] font-mono text-emerald-700 uppercase tracking-widest select-none"
               >
                 🔒 Registrado — solo lectura
               </span>
@@ -202,31 +202,31 @@ const Crisis1Console = forwardRef<Crisis1Ref>((_, ref) => {
 
       {/* Sub-punto: método de registro */}
       <Dialog open={!!pendingNode} onOpenChange={(o) => { if (!o) setPendingNode(null); }}>
-        <DialogContent className="bg-slate-900 border-orange-500/40 text-foreground">
+        <DialogContent className="bg-card border-orange/40 text-foreground shadow-md">
           <DialogHeader>
-            <DialogTitle className="text-orange-300 font-mono uppercase tracking-wider">
+            <DialogTitle className="text-orange font-mono uppercase tracking-wider">
               Sub-punto operativo
             </DialogTitle>
-            <DialogDescription className="text-slate-300">
+            <DialogDescription className="text-muted-foreground">
               ¿Con qué método registrarás este movimiento para evitar descuadres de inventario?
             </DialogDescription>
           </DialogHeader>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
             <button
               onClick={() => confirmMethod('WMS')}
-              className="p-4 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 hover:border-orange-500 transition-all text-left"
+              className="p-4 rounded-lg border border-border bg-background hover:bg-secondary hover:border-orange transition-all text-left"
             >
               <div className="text-2xl mb-1">📱</div>
-              <div className="font-mono text-sm text-orange-300">Terminal WMS</div>
-              <div className="text-[11px] text-slate-400 mt-1">Escáner digital en tiempo real</div>
+              <div className="font-mono text-sm text-orange">Terminal WMS</div>
+              <div className="text-[11px] text-muted-foreground mt-1">Escáner digital en tiempo real</div>
             </button>
             <button
               onClick={() => confirmMethod('PAPEL')}
-              className="p-4 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 hover:border-orange-500 transition-all text-left"
+              className="p-4 rounded-lg border border-border bg-background hover:bg-secondary hover:border-orange transition-all text-left"
             >
               <div className="text-2xl mb-1">📋</div>
-              <div className="font-mono text-sm text-orange-300">Planilla física</div>
-              <div className="text-[11px] text-slate-400 mt-1">Papel y tabla manual</div>
+              <div className="font-mono text-sm text-orange">Planilla física</div>
+              <div className="text-[11px] text-muted-foreground mt-1">Papel y tabla manual</div>
             </button>
           </div>
         </DialogContent>

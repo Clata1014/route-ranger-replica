@@ -114,7 +114,7 @@ export default function PinEntry({
       <p className="text-muted-foreground text-sm mb-6">Ingresa el PIN del cartel:</p>
 
       {feedback && (
-        <div className="rounded-xl p-3 mb-4 text-sm bg-emerald-900/40 border border-emerald-500/30 text-emerald-300 w-full">
+        <div className="rounded-xl p-3 mb-4 text-sm bg-emerald-50 border border-emerald-200 text-emerald-800 w-full">
           {feedback}
         </div>
       )}
