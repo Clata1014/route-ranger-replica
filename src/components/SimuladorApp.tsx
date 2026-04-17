@@ -285,6 +285,10 @@ export default function SimuladorApp() {
         {phase === 'c5_r2' && (
           <CrisisWrapper
             crisisNumber={2}
+            forensicId="c5_r2"
+            expectedKeywords={['canal largo', 'mayorista', 'minorista', 'tat', 'cobertura', 'fraccionar', 'consumo masivo']}
+            correctAnswerSummary="Encender SOLO Megamayorista + Minorista TAT (Canal Largo)"
+            whyTheory="El consumo masivo económico exige Canal Largo. El Mayorista fracciona la carga de tractomulas y el Minorista (tienda TAT) vende al detal en cada cuadra. El Aduanero es para comercio internacional y la Web no sirve para cobertura masiva de 500,000 tiendas."
             icon="🚨"
             title="LA GUERRA DEL CONSUMO MASIVO — Canales"
             dossier={'La Junta Directiva está histérica. Lanzamos una nueva bebida económica para competir con Postobón, pero Finanzas exige que el producto esté en el 100% de las 500,000 tiendas de barrio (TAT) del país en 48 horas. Tu presupuesto para camiones propios es CERO.\n\nConfigura el enrutador de canales encendiendo (ON) SOLO a los eslabones logísticos indispensables para lograr esta hazaña. Un interruptor de más o de menos y la operación colapsa.'}
