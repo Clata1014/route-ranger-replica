@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Trophy } from 'lucide-react';
+import { Trophy, CheckCircle2, XCircle } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { speak } from '@/lib/speech';
 import { loadAudit, clearAudit, type AuditEntry } from '@/components/ChannelBuilder';
+import { loadForensicLog, clearForensicLog, type ForensicEntry } from '@/lib/forensicLog';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface VictoryScreenProps {
@@ -12,12 +13,24 @@ interface VictoryScreenProps {
   errorLog: string[];
 }
 
-function calcGrade(errors: number): string {
-  if (errors === 0) return '5.0 (Nivel Dios)';
-  if (errors <= 2) return '4.5 (Excelente)';
-  if (errors <= 4) return '4.0 (Sobresaliente)';
-  if (errors <= 6) return '3.5 (Aceptable)';
-  return '3.0 (Sobrevivió de milagro)';
+function calcGrade(correct: number, total: number): string {
+  if (total === 0) return 'N/A';
+  const pct = (correct / total) * 100;
+  if (pct >= 95) return `5.0 (${pct.toFixed(0)}% — Nivel Dios)`;
+  if (pct >= 85) return `4.5 (${pct.toFixed(0)}% — Excelente)`;
+  if (pct >= 70) return `4.0 (${pct.toFixed(0)}% — Sobresaliente)`;
+  if (pct >= 60) return `3.5 (${pct.toFixed(0)}% — Aceptable)`;
+  if (pct >= 50) return `3.0 (${pct.toFixed(0)}% — Sobrevivió)`;
+  return `2.0 (${pct.toFixed(0)}% — Reprobado)`;
+}
+
+function kindLabel(kind: ForensicEntry['kind']): string {
+  switch (kind) {
+    case 'channel_question': return 'Pregunta de Canal';
+    case 'pin_entry': return 'Secuencia de PINs';
+    case 'channel_builder': return 'Taller de Ruta';
+    case 'crisis': return 'Crisis Gerencial';
+  }
 }
 
 export default function VictoryScreen({ teamName, elapsedSeconds, errorCount, errorLog }: VictoryScreenProps) {
@@ -25,14 +38,18 @@ export default function VictoryScreen({ teamName, elapsedSeconds, errorCount, er
   const [isSending, setIsSending] = useState(false);
   const [isSent, setIsSent] = useState(false);
   const auditEntries: AuditEntry[] = useMemo(() => loadAudit(), []);
+  const forensic: ForensicEntry[] = useMemo(() => loadForensicLog(), []);
 
   const mins = String(Math.floor(elapsedSeconds / 60)).padStart(2, '0');
   const secs = String(elapsedSeconds % 60).padStart(2, '0');
   const timeStr = `${mins}:${secs}`;
-  const grade = calcGrade(errorCount);
+
+  const totalSections = forensic.length;
+  const correctSections = forensic.filter(f => f.isCorrect).length;
+  const grade = calcGrade(correctSections, totalSections);
 
   useEffect(() => {
-    speak('Operación logística maestra completada con éxito. Son verdaderos gerentes de operaciones. Felicidades ' + teamName);
+    speak('Reporte forense completo generado. Revisa cada sección, sus aciertos y los conceptos que debes reforzar. Felicidades ' + teamName);
     const end = Date.now() + 4000;
     const frame = () => {
       confetti({ particleCount: 4, angle: 60, spread: 55, origin: { x: 0 } });
@@ -42,21 +59,28 @@ export default function VictoryScreen({ teamName, elapsedSeconds, errorCount, er
     frame();
   }, [teamName]);
 
-  const reporteForense = errorLog.length > 0
-    ? errorLog.join('\n\n-------------------\n\n')
-    : 'ESTUDIANTE PERFECTO: Cero errores cometidos en el simulador.';
-
-  const auditoriaTexto = auditEntries.length === 0
-    ? 'Sin registros de auditoría logística.'
-    : auditEntries.map(e => {
-        const studentRouteStr = e.studentRoute.map((n, i) => {
-          const sp = i > 0 ? e.studentSubPoints[i - 1] : null;
-          return (sp ? `[${sp.emoji} ${sp.label}] ` : '') + `${n.emoji} ${n.label}`;
-        }).join(' ➔ ');
-        const correctRouteStr = e.correctRoute.map(n => `${n.emoji} ${n.label}`).join(' ➔ ');
-        const veredicto = e.isCorrect ? '✅ VISIÓN IMPECABLE' : '❌ ESTRATEGIA FALLIDA';
-        return `${e.productEmoji} ${e.productTitle}\n   Veredicto: ${veredicto}\n   Su ruta: ${studentRouteStr}\n   Ruta correcta: ${correctRouteStr}\n   Justificación: ${e.whyTheory}`;
-      }).join('\n\n-------------------\n\n');
+  // Plain-text summary for email
+  const fullForensicText = forensic.map((f, i) => {
+    const verdict = f.isCorrect ? '✅ CORRECTO' : '❌ INCORRECTO';
+    const lines = [
+      `${i + 1}. [${kindLabel(f.kind)}] ${f.phaseLabel}`,
+      `   Veredicto: ${verdict}  (Intentos: ${f.attempts})`,
+      `   Tu respuesta: ${f.studentAnswer}`,
+      `   Respuesta correcta: ${f.correctAnswer}`,
+    ];
+    if (f.justification) {
+      lines.push(`   📝 Justificación: "${f.justification.slice(0, 300)}"`);
+    }
+    if (f.keywordAnalysis) {
+      lines.push(`   🔑 Palabras clave esperadas: ${f.keywordAnalysis.expected.join(', ')}`);
+      lines.push(`   ✅ Encontradas: ${f.keywordAnalysis.found.join(', ') || '(ninguna)'}`);
+      lines.push(`   ❌ Faltaron: ${f.keywordAnalysis.missing.join(', ') || '(ninguna)'}`);
+    }
+    if (f.whyTheory) {
+      lines.push(`   💡 Teoría: ${f.whyTheory}`);
+    }
+    return lines.join('\n');
+  }).join('\n\n-------------------\n\n');
 
   const handleSilentSend = () => {
     if (!studentEmail) {
@@ -74,9 +98,10 @@ export default function VictoryScreen({ teamName, elapsedSeconds, errorCount, er
         '2. Correo del Estudiante': studentEmail,
         '3. NOTA FINAL': grade,
         '4. Tiempo Total': timeStr,
-        '5. Total de Errores': errorCount,
-        '6. BITÁCORA FORENSE DETALLADA': reporteForense,
-        '7. AUDITORÍA LOGÍSTICA (TALLER PRÁCTICO)': auditoriaTexto,
+        '5. Aciertos': `${correctSections} / ${totalSections}`,
+        '6. Total de Errores en Vivo': errorCount,
+        '7. REPORTE FORENSE COMPLETO (DESDE EL INICIO)': fullForensicText,
+        '8. BITÁCORA DE PENALIDADES': errorLog.join('\n\n---\n\n') || 'Sin penalidades',
       }),
     })
       .then((response) => response.json())
@@ -84,6 +109,7 @@ export default function VictoryScreen({ teamName, elapsedSeconds, errorCount, er
         setIsSent(true);
         setIsSending(false);
         clearAudit();
+        clearForensicLog();
       })
       .catch(() => {
         alert('Error de conexión. Revisa tu internet e intenta de nuevo.');
@@ -92,85 +118,117 @@ export default function VictoryScreen({ teamName, elapsedSeconds, errorCount, er
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center bg-background">
-      <Trophy className="text-yellow-400 mb-4" size={150} />
-      <h1 className="font-display text-2xl text-gradient-orange mb-2">OPERACIÓN LOGÍSTICA MAESTRA</h1>
-      <p className="text-foreground text-lg mb-6">¡ERES UN GERENTE LOGÍSTICO NIVEL DIOS!</p>
+    <div className="min-h-screen flex flex-col items-center p-4 bg-background">
+      <Trophy className="text-yellow-400 mt-6 mb-2" size={100} />
+      <h1 className="font-display text-2xl text-gradient-orange mb-1 text-center">REPORTE FORENSE TOTAL</h1>
+      <p className="text-foreground text-sm mb-4 text-center">Cada decisión que tomaste, desde el primer segundo.</p>
 
-      <div className="bg-card border border-border rounded-xl p-6 mb-4 w-full max-w-sm">
-        <p className="text-muted-foreground text-sm mb-1">Estudiante</p>
-        <p className="font-display text-xl text-foreground">{teamName}</p>
+      <div className="bg-card border border-border rounded-xl p-4 mb-3 w-full max-w-md text-center">
+        <p className="text-muted-foreground text-xs mb-1">Estudiante</p>
+        <p className="font-display text-lg text-foreground">{teamName}</p>
       </div>
 
-      <div className="flex gap-4 mb-4 w-full max-w-sm">
-        <div className="bg-card border border-border rounded-xl p-4 flex-1">
-          <p className="text-muted-foreground text-xs mb-1">Tiempo</p>
-          <p className="font-display text-2xl text-orange">{timeStr}</p>
+      <div className="grid grid-cols-3 gap-2 mb-3 w-full max-w-md">
+        <div className="bg-card border border-border rounded-xl p-3 text-center">
+          <p className="text-muted-foreground text-[10px] mb-1">Tiempo</p>
+          <p className="font-display text-lg text-orange">{timeStr}</p>
         </div>
-        <div className="bg-card border border-border rounded-xl p-4 flex-1">
-          <p className="text-muted-foreground text-xs mb-1">Errores</p>
-          <p className="font-display text-2xl text-red-400">{errorCount}</p>
+        <div className="bg-card border border-border rounded-xl p-3 text-center">
+          <p className="text-muted-foreground text-[10px] mb-1">Aciertos</p>
+          <p className="font-display text-lg text-emerald-400">{correctSections}/{totalSections}</p>
+        </div>
+        <div className="bg-card border border-border rounded-xl p-3 text-center">
+          <p className="text-muted-foreground text-[10px] mb-1">Penalidades</p>
+          <p className="font-display text-lg text-red-400">{errorCount}</p>
         </div>
       </div>
 
-      <div className="bg-card border border-border rounded-xl p-6 mb-4 w-full max-w-sm">
-        <p className="text-muted-foreground text-sm mb-1">Nota del Sistema</p>
-        <p className="font-display text-3xl text-green-400">{grade}</p>
+      <div className="bg-card border border-border rounded-xl p-4 mb-5 w-full max-w-md text-center">
+        <p className="text-muted-foreground text-xs mb-1">Nota del Sistema</p>
+        <p className="font-display text-2xl text-emerald-400">{grade}</p>
       </div>
 
-      {/* === AUDITORÍA LOGÍSTICA — Taller Práctico === */}
-      <div className="w-full max-w-sm mb-6">
-        <p className="text-orange font-display text-sm mb-3 tracking-wider text-left">📊 AUDITORÍA LOGÍSTICA — TALLER PRÁCTICO</p>
-        {auditEntries.length === 0 ? (
+      {/* === REPORTE FORENSE TOTAL — sección por sección === */}
+      <div className="w-full max-w-md mb-6">
+        <p className="text-orange font-display text-sm mb-3 tracking-wider">🔬 REPORTE FORENSE — TODAS LAS SECCIONES</p>
+
+        {forensic.length === 0 ? (
           <Card className="bg-slate-900 border-slate-700">
-            <CardContent className="p-4 text-left">
-              <p className="text-sm text-muted-foreground">Sin registros de auditoría del taller práctico.</p>
+            <CardContent className="p-4">
+              <p className="text-sm text-muted-foreground">No se registraron interacciones (¿saltó el simulador?).</p>
             </CardContent>
           </Card>
         ) : (
           <div className="space-y-3">
-            {auditEntries.map((e) => (
-              <Card key={e.productIdx} className={`bg-slate-900 ${e.isCorrect ? 'border-emerald-500/50' : 'border-red-500/50'}`}>
+            {forensic.map((f, i) => (
+              <Card key={f.id} className={`bg-slate-900 ${f.isCorrect ? 'border-emerald-500/50' : 'border-red-500/50'}`}>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm flex items-center gap-2 text-left">
-                    <span className="text-xl">{e.productEmoji}</span>
-                    <span className="text-foreground">{e.productTitle}</span>
-                  </CardTitle>
-                  <p className={`text-xs font-display tracking-wider text-left ${e.isCorrect ? 'text-emerald-400' : 'text-red-400'}`}>
-                    {e.isCorrect ? '✅ Visión Impecable' : '❌ Estrategia Fallida'}
-                  </p>
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex-1">
+                      <p className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest">
+                        {i + 1}. {kindLabel(f.kind)} · {f.attempts} intento{f.attempts !== 1 ? 's' : ''}
+                      </p>
+                      <CardTitle className="text-sm text-foreground text-left mt-1">
+                        {f.phaseLabel}
+                      </CardTitle>
+                    </div>
+                    {f.isCorrect ? (
+                      <CheckCircle2 className="text-emerald-400 shrink-0" size={22} />
+                    ) : (
+                      <XCircle className="text-red-400 shrink-0" size={22} />
+                    )}
+                  </div>
                 </CardHeader>
                 <CardContent className="space-y-2 text-left">
-                  <div>
-                    <p className="text-[10px] font-display text-muted-foreground tracking-wider mb-1">TU RUTA:</p>
-                    <p className="text-xs text-foreground">
-                      {e.studentRoute.map((n, i) => {
-                        const sp = i > 0 ? e.studentSubPoints[i - 1] : null;
-                        return (
-                          <span key={i}>
-                            {sp && <span className="text-orange">[{sp.emoji} {sp.label}] </span>}
-                            {n.emoji} {n.label}
-                            {i < e.studentRoute.length - 1 && <span className="text-orange"> ➔ </span>}
-                          </span>
-                        );
-                      })}
-                    </p>
+                  <div className="bg-slate-950/60 rounded-md p-2">
+                    <p className="text-[10px] font-display text-muted-foreground tracking-wider mb-1">TU RESPUESTA:</p>
+                    <p className="text-xs text-foreground whitespace-pre-wrap break-words">{f.studentAnswer || '(vacío)'}</p>
                   </div>
-                  <div>
-                    <p className="text-[10px] font-display text-orange tracking-wider mb-1">💡 RUTA CORRECTA:</p>
-                    <p className="text-xs text-foreground">
-                      {e.correctRoute.map((n, i) => (
-                        <span key={i}>
-                          {n.emoji} {n.label}
-                          {i < e.correctRoute.length - 1 && <span className="text-orange"> ➔ </span>}
-                        </span>
-                      ))}
-                    </p>
+
+                  <div className="bg-emerald-950/30 rounded-md p-2 border border-emerald-500/20">
+                    <p className="text-[10px] font-display text-emerald-400 tracking-wider mb-1">💡 RESPUESTA CORRECTA:</p>
+                    <p className="text-xs text-emerald-100">{f.correctAnswer}</p>
                   </div>
-                  <div className="pt-1 border-t border-slate-700">
-                    <p className="text-[10px] font-display text-muted-foreground tracking-wider mb-1">¿POR QUÉ?</p>
-                    <p className="text-xs text-slate-300 leading-relaxed">{e.whyTheory}</p>
-                  </div>
+
+                  {f.justification && (
+                    <div className="bg-slate-950/60 rounded-md p-2">
+                      <p className="text-[10px] font-display text-orange tracking-wider mb-1">📝 TU JUSTIFICACIÓN GERENCIAL:</p>
+                      <p className="text-xs text-slate-200 italic whitespace-pre-wrap break-words">"{f.justification}"</p>
+                    </div>
+                  )}
+
+                  {f.keywordAnalysis && (
+                    <div className="bg-slate-950/60 rounded-md p-2 space-y-1">
+                      <p className="text-[10px] font-display text-yellow-400 tracking-wider">🔑 ANÁLISIS DE PALABRAS CLAVE:</p>
+                      <div className="flex flex-wrap gap-1">
+                        {f.keywordAnalysis.expected.map(kw => {
+                          const found = f.keywordAnalysis!.found.includes(kw);
+                          return (
+                            <span
+                              key={kw}
+                              className={`text-[10px] px-2 py-0.5 rounded font-mono ${
+                                found
+                                  ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
+                                  : 'bg-red-500/10 text-red-300 border border-red-500/30 line-through'
+                              }`}
+                            >
+                              {found ? '✓' : '✗'} {kw}
+                            </span>
+                          );
+                        })}
+                      </div>
+                      <p className="text-[10px] text-muted-foreground pt-1">
+                        {f.keywordAnalysis.found.length}/{f.keywordAnalysis.expected.length} conceptos clave detectados.
+                      </p>
+                    </div>
+                  )}
+
+                  {f.whyTheory && (
+                    <div className="pt-1 border-t border-slate-700">
+                      <p className="text-[10px] font-display text-muted-foreground tracking-wider mb-1">¿POR QUÉ?</p>
+                      <p className="text-xs text-slate-300 leading-relaxed">{f.whyTheory}</p>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             ))}
@@ -178,50 +236,49 @@ export default function VictoryScreen({ teamName, elapsedSeconds, errorCount, er
         )}
       </div>
 
-      {/* Audit Log */}
-      <div className="bg-slate-900 border border-red-500/50 rounded-xl p-4 mb-6 w-full max-w-sm max-h-[500px] overflow-y-auto">
-        <p className="text-orange-400 font-display text-sm mb-3 tracking-wider">📋 BITÁCORA DE AUDITORÍA LOGÍSTICA</p>
-        {errorLog.length === 0 ? (
-          <p className="text-green-400 text-sm font-mono">✅ Operación impecable. Cero errores de conocimiento registrados.</p>
-        ) : (
-          <div className="space-y-3">
+      {/* Bitácora de penalidades en vivo (legacy) */}
+      {errorLog.length > 0 && (
+        <div className="bg-slate-900 border border-red-500/50 rounded-xl p-4 mb-6 w-full max-w-md max-h-[300px] overflow-y-auto">
+          <p className="text-orange-400 font-display text-sm mb-3 tracking-wider">📋 BITÁCORA DE PENALIDADES EN VIVO</p>
+          <div className="space-y-2">
             {errorLog.map((entry, i) => (
-              <div key={i} className="whitespace-pre-wrap text-sm leading-relaxed text-gray-300 bg-slate-800/80 p-4 rounded border-l-4 border-red-500">
-                <span className="text-red-400 font-bold text-xs">🔴 Error #{i + 1}</span>
+              <div key={i} className="whitespace-pre-wrap text-xs leading-relaxed text-gray-300 bg-slate-800/80 p-3 rounded border-l-4 border-red-500">
+                <span className="text-red-400 font-bold text-[10px]">🔴 #{i + 1}</span>
                 <div className="mt-1">{entry}</div>
               </div>
             ))}
           </div>
-        )}
-      </div>
-
-      {/* Formulario de envío silencioso */}
-      {!isSent ? (
-        <div className="flex flex-col gap-3 mt-4 border-t border-slate-700 pt-4 w-full max-w-sm">
-          <p className="text-sm text-gray-300 mb-1">Para oficializar tu nota con la profesora, envía tu reporte:</p>
-          <input
-            type="email"
-            placeholder="✉️ Escribe TU correo (Estudiante)..."
-            value={studentEmail}
-            onChange={(e) => setStudentEmail(e.target.value)}
-            className="w-full p-4 rounded-lg bg-slate-800 border border-slate-600 text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none text-lg"
-          />
-          <button
-            onClick={handleSilentSend}
-            disabled={isSending}
-            className={`w-full py-4 rounded-lg font-bold text-white text-lg transition-colors shadow-lg ${isSending ? 'bg-orange-500 animate-pulse' : 'bg-blue-600 hover:bg-blue-700'}`}
-          >
-            {isSending ? '⏳ ENVIANDO REPORTE AL SISTEMA...' : '🚀 ENVIAR CALIFICACIÓN OFICIAL'}
-          </button>
-        </div>
-      ) : (
-        <div className="mt-4 p-5 bg-green-900/40 border border-green-500 rounded-lg text-center animate-fade-in w-full max-w-sm">
-          <p className="text-green-400 font-bold text-xl mb-2">✅ ¡REPORTE ENVIADO EXITOSAMENTE!</p>
-          <p className="text-gray-300">Tu calificación y bitácora de respuestas han sido registradas en el sistema de la profesora. Ya puedes cerrar esta ventana.</p>
         </div>
       )}
 
-      <p className="text-red-400 text-xs mt-3 font-bold">⚠️ Atención: Si no envías tu reporte, tu nota será 0.0</p>
+      {/* Formulario de envío */}
+      <div className="w-full max-w-md">
+        {!isSent ? (
+          <div className="flex flex-col gap-3 mt-2 border-t border-slate-700 pt-4">
+            <p className="text-sm text-gray-300 mb-1">Para oficializar tu nota con la profesora, envía tu reporte:</p>
+            <input
+              type="email"
+              placeholder="✉️ Escribe TU correo (Estudiante)..."
+              value={studentEmail}
+              onChange={(e) => setStudentEmail(e.target.value)}
+              className="w-full p-4 rounded-lg bg-slate-800 border border-slate-600 text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none text-base"
+            />
+            <button
+              onClick={handleSilentSend}
+              disabled={isSending}
+              className={`w-full py-4 rounded-lg font-bold text-white text-lg transition-colors shadow-lg ${isSending ? 'bg-orange-500 animate-pulse' : 'bg-blue-600 hover:bg-blue-700'}`}
+            >
+              {isSending ? '⏳ ENVIANDO REPORTE FORENSE...' : '🚀 ENVIAR CALIFICACIÓN OFICIAL'}
+            </button>
+            <p className="text-red-400 text-xs text-center font-bold">⚠️ Si no envías tu reporte, tu nota será 0.0</p>
+          </div>
+        ) : (
+          <div className="mt-4 p-5 bg-green-900/40 border border-green-500 rounded-lg text-center animate-fade-in">
+            <p className="text-green-400 font-bold text-xl mb-2">✅ ¡REPORTE ENVIADO EXITOSAMENTE!</p>
+            <p className="text-gray-300 text-sm">Tu reporte forense completo (con todas tus respuestas, justificaciones y palabras clave detectadas) fue enviado a la profesora. Ya puedes cerrar esta ventana.</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
