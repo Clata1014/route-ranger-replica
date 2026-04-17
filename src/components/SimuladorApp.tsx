@@ -358,8 +358,6 @@ export default function SimuladorApp() {
             onError={(voice, detail) => triggerPenalty(voice, 'victory', detail || 'Crisis 6 (Acertijo final): Confundió el rol de Picking (caminar) con Packing (empacar fijo)')}
             videoUrl="/videos/Picking_Crisis6.mp4"
             videoUrl2="/videos/Packing_Crisis6.mp4"
-            videoLabel1="🧭 PICKING"
-            videoLabel2="📦 PACKING"
           >
             <Crisis6Console ref={crisis6Ref} />
           </CrisisWrapper>
