@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { MapPin } from 'lucide-react';
 import { speak } from '@/lib/speech';
+import { recordForensic } from '@/lib/forensicLog';
 
 interface PinStep {
   pin: string;
@@ -15,6 +16,8 @@ interface PinEntryProps {
   errorVoice: string;
   onComplete: () => void;
   onError: (voice: string) => void;
+  /** Forensic id (e.g. 'c1_pins'). */
+  forensicId?: string;
 }
 
 export default function PinEntry({
