@@ -123,6 +123,14 @@ const Crisis1Console = forwardRef<Crisis1Ref>((_, ref) => {
     setNodes([]);
   }, [locked]);
 
+  const unlockSection = () => {
+    localStorage.removeItem(STORAGE_KEY);
+    setNodes([]);
+    setLocked(false);
+    setText('');
+    setPendingNode(null);
+  };
+
   return (
     <div className="space-y-4">
       {/* Canvas / lienzo */}
