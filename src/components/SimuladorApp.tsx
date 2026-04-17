@@ -307,6 +307,10 @@ export default function SimuladorApp() {
         {phase === 'c5_r3' && (
           <CrisisWrapper
             crisisNumber={3}
+            forensicId="c5_r3"
+            expectedKeywords={['hard discount', 'austeridad', 'precio', 'rotación', 'sku', 'caja', 'cartón', 'd1', 'ara']}
+            correctAnswerSummary="0% lujos en góndolas + menos de 1,000 SKUs (austeridad total)"
+            whyTheory="El formato Hard Discount exige austeridad total. Se exhibe y vende desde la misma caja de cartón rasgada (0% góndolas lujosas). Menos variedad de SKUs = reabastecimiento más rápido, alta rotación y precios imbatibles. El rey absoluto es el PRECIO."
             icon="🚨"
             title="REESTRUCTURACIÓN HARD DISCOUNT — Formatos"
             dossier={'Acabamos de comprar un supermercado tradicional en quiebra y tu misión es convertirlo en un formato Hard Discount (estilo Tiendas D1 o Ara). El equipo de marketing quiere poner pisos de mármol y traer 20,000 marcas diferentes.\n\nPara lograr rentabilidad y destrozar a la competencia con precios bajos, debes calibrar los parámetros financieros a sus niveles óptimos. Un mal calibre y serás despedido por la Junta Directiva.'}
