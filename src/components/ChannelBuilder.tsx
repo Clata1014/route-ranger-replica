@@ -3,6 +3,7 @@ import { Factory, Home, Warehouse, ShoppingCart, Cloud, Truck, Zap, RotateCcw, A
 import { toast } from 'sonner';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import InstructorOverride from './InstructorOverride';
 
 type NodeType = 'fabrica' | 'mayorista' | 'minorista' | 'nube' | 'flete' | 'cliente';
 
