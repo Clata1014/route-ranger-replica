@@ -440,12 +440,19 @@ export default function ChannelBuilder({ onVictory, startProduct = 0, onProductA
             </button>
           </div>
         ) : (
-          <div className="flex items-center gap-2 p-3 rounded-xl bg-emerald-500/5 border border-emerald-500/20">
-            <Lock size={14} className="text-emerald-400 shrink-0" />
-            <p className="text-[11px] text-emerald-300/90">
-              Ruta archivada en la auditoría. Esta sección quedó bloqueada (modo solo lectura).
-            </p>
-          </div>
+          <InstructorOverride onUnlock={unlockThisSection}>
+            {({ onDoubleClick }) => (
+              <div
+                onDoubleClick={onDoubleClick}
+                className="flex items-center gap-2 p-3 rounded-xl bg-emerald-500/5 border border-emerald-500/20 select-none"
+              >
+                <Lock size={14} className="text-emerald-400 shrink-0" />
+                <p className="text-[11px] text-emerald-300/90">
+                  Ruta archivada en la auditoría. Esta sección quedó bloqueada (modo solo lectura).
+                </p>
+              </div>
+            )}
+          </InstructorOverride>
         )}
       </div>
 
