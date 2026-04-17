@@ -21,7 +21,7 @@ export default function InstructorOverride({ children, onUnlock, password = DEFA
 
   const handleSubmit = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
-    if (pass === ADMIN_PASS) {
+    if (pass === password) {
       onUnlock();
       setOpen(false);
       setPass('');
