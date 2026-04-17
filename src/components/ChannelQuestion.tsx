@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Truck, Store, Bike } from 'lucide-react';
 import { speak } from '@/lib/speech';
+import { recordForensic } from '@/lib/forensicLog';
 
 interface ChannelQuestionProps {
   icon: 'truck' | 'store' | 'bike';
@@ -17,6 +18,8 @@ interface ChannelQuestionProps {
   errorVoice: string;
   onSuccess: () => void;
   onError: () => void;
+  /** Forensic id for the report (e.g. 'c1_channel'). */
+  forensicId?: string;
 }
 
 const ICONS = {
@@ -39,16 +42,34 @@ export default function ChannelQuestion({
   successVoice,
   onSuccess,
   onError,
+  forensicId,
 }: ChannelQuestionProps) {
   const [feedback, setFeedback] = useState<'success' | null>(null);
   const [disabled, setDisabled] = useState(false);
+  const attemptsRef = useRef(0);
   const IconComp = ICONS[icon];
+
+  const log = (studentAnswer: string, isCorrect: boolean) => {
+    if (!forensicId) return;
+    recordForensic({
+      id: forensicId,
+      kind: 'channel_question',
+      phaseLabel: title,
+      question,
+      studentAnswer,
+      correctAnswer,
+      isCorrect,
+      attempts: attemptsRef.current,
+    });
+  };
 
   const handleChoice = (choice: string) => {
     if (disabled) return;
     setDisabled(true);
+    attemptsRef.current += 1;
 
     if (choice === correctAnswer) {
+      log(choice, true);
       setFeedback('success');
       speak(successVoice);
       setTimeout(() => {
@@ -56,6 +77,7 @@ export default function ChannelQuestion({
         onSuccess();
       }, 3000);
     } else {
+      log(choice, false);
       onError();
       setDisabled(false);
     }

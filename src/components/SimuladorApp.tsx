@@ -157,6 +157,7 @@ export default function SimuladorApp() {
         {phase === 'c1_channel' && (
           <ChannelQuestion
             icon="truck"
+            forensicId="c1_channel"
             nativeVideoUrl="/videos/Canal_Logistico_con_Intermediario.mp4"
             title="📦 CASO 1: CONSUMO MASIVO — POSTOBÓN"
             description="Las tractomulas de Postobón salen de la fábrica con millones de gaseosas. El objetivo es llegar a miles de tienditas de barrio, pero las tractomulas gigantes NO CABEN por esas calles estrechas."
@@ -171,6 +172,7 @@ export default function SimuladorApp() {
         )}
         {phase === 'c1_pins' && (
           <PinEntry
+            forensicId="c1_pins"
             title="📦 CASO 1: POSTOBÓN"
             subtitle="Ruta Física — Canal Largo"
             pinSequence={[
@@ -187,6 +189,7 @@ export default function SimuladorApp() {
         {phase === 'c2_channel' && (
           <ChannelQuestion
             icon="store"
+            forensicId="c2_channel"
             nativeVideoUrl="/videos/Optimizacion_Logistica_Hard_Discount.mp4"
             title="🛒 CASO 2: HARD DISCOUNT — D1 / ARA"
             description="Para competir con precios bajos, debemos optimizar la cadena. Decidimos vender los productos directamente desde su caja de cartón corrugado y eliminar comisiones de terceros."
@@ -201,6 +204,7 @@ export default function SimuladorApp() {
         )}
         {phase === 'c2_pins' && (
           <PinEntry
+            forensicId="c2_pins"
             title="🛒 CASO 2: HARD DISCOUNT"
             subtitle="Ruta Física — Canal Corto"
             pinSequence={[
@@ -216,6 +220,7 @@ export default function SimuladorApp() {
         {phase === 'c3_channel' && (
           <ChannelQuestion
             icon="bike"
+            forensicId="c3_channel"
             nativeVideoUrl="/videos/Creacion_de_Canal_Digital_y_Video.mp4"
             title="💻 CASO 3: PRODUCTO DIGITAL Y E-COMMERCE"
             description="El cliente exige inmediatez cuando pide sus productos por canales digitales (como una página web o Instagram). El reto logístico es entregar el producto de forma instantánea a través de internet, sin usar cajas, bodegas físicas ni camiones de transporte."
@@ -230,6 +235,7 @@ export default function SimuladorApp() {
         )}
         {phase === 'c3_pins' && (
           <PinEntry
+            forensicId="c3_pins"
             title="💻 CASO 3: PRODUCTO DIGITAL"
             subtitle="Ruta Digital — Canal Directo"
             pinSequence={[
@@ -257,6 +263,10 @@ export default function SimuladorApp() {
         {phase === 'c5_r1' && (
           <CrisisWrapper
             crisisNumber={1}
+            forensicId="c5_r1"
+            expectedKeywords={['recepción', 'clasificación', 'picking', 'packing', 'despacho', 'wms', 'cadena de frío', 'perecederos']}
+            correctAnswerSummary="Recepción → Clasificación → Picking y Packing → Despacho (todos con WMS)"
+            whyTheory="El flujo lógico de un CEDI es estricto: Recibes, acomodas, alistas y despachas. La operaria del video usaba planilla de papel — esa es la TRAMPA. En logística de alto volumen, copiar lo que ves sin analizar genera inventario fantasma. El WMS (escáner en tiempo real) es la única respuesta gerencial correcta."
             icon="🚨"
             title="COLAPSO DE PERECEDEROS — Flujo del CEDI"
             dossier={'¡Alerta Gerencial! Son las 3:00 AM. Acaban de llegar 15 tractomulas con flores y vacunas (perecederos críticos). Los operarios son nuevos, el muelle es un caos y están cruzando los procesos. Si la mercancía pierde la cadena de frío, quebramos.\n\nToma el control del panel WMS y organiza el flujo físico de la mercancía en su orden lógico estricto. Un error aquí significa millones en pérdidas y vidas en riesgo.'}
@@ -275,6 +285,10 @@ export default function SimuladorApp() {
         {phase === 'c5_r2' && (
           <CrisisWrapper
             crisisNumber={2}
+            forensicId="c5_r2"
+            expectedKeywords={['canal largo', 'mayorista', 'minorista', 'tat', 'cobertura', 'fraccionar', 'consumo masivo']}
+            correctAnswerSummary="Encender SOLO Megamayorista + Minorista TAT (Canal Largo)"
+            whyTheory="El consumo masivo económico exige Canal Largo. El Mayorista fracciona la carga de tractomulas y el Minorista (tienda TAT) vende al detal en cada cuadra. El Aduanero es para comercio internacional y la Web no sirve para cobertura masiva de 500,000 tiendas."
             icon="🚨"
             title="LA GUERRA DEL CONSUMO MASIVO — Canales"
             dossier={'La Junta Directiva está histérica. Lanzamos una nueva bebida económica para competir con Postobón, pero Finanzas exige que el producto esté en el 100% de las 500,000 tiendas de barrio (TAT) del país en 48 horas. Tu presupuesto para camiones propios es CERO.\n\nConfigura el enrutador de canales encendiendo (ON) SOLO a los eslabones logísticos indispensables para lograr esta hazaña. Un interruptor de más o de menos y la operación colapsa.'}
@@ -293,6 +307,10 @@ export default function SimuladorApp() {
         {phase === 'c5_r3' && (
           <CrisisWrapper
             crisisNumber={3}
+            forensicId="c5_r3"
+            expectedKeywords={['hard discount', 'austeridad', 'precio', 'rotación', 'sku', 'caja', 'cartón', 'd1', 'ara']}
+            correctAnswerSummary="0% lujos en góndolas + menos de 1,000 SKUs (austeridad total)"
+            whyTheory="El formato Hard Discount exige austeridad total. Se exhibe y vende desde la misma caja de cartón rasgada (0% góndolas lujosas). Menos variedad de SKUs = reabastecimiento más rápido, alta rotación y precios imbatibles. El rey absoluto es el PRECIO."
             icon="🚨"
             title="REESTRUCTURACIÓN HARD DISCOUNT — Formatos"
             dossier={'Acabamos de comprar un supermercado tradicional en quiebra y tu misión es convertirlo en un formato Hard Discount (estilo Tiendas D1 o Ara). El equipo de marketing quiere poner pisos de mármol y traer 20,000 marcas diferentes.\n\nPara lograr rentabilidad y destrozar a la competencia con precios bajos, debes calibrar los parámetros financieros a sus niveles óptimos. Un mal calibre y serás despedido por la Junta Directiva.'}
@@ -311,6 +329,10 @@ export default function SimuladorApp() {
         {phase === 'c5_r4' && (
           <CrisisWrapper
             crisisNumber={4}
+            forensicId="c5_r4"
+            expectedKeywords={['última milla', 'last mile', '53', 'tráfico', 're-entrega', 'reentrega', 'urbano', 'domicilio']}
+            correctAnswerSummary="53% del costo total logístico se va en la Última Milla"
+            whyTheory="La Última Milla (Last Mile) representa hasta el 53% del costo total logístico. Es el tramo más corto pero el más ineficiente: tráfico urbano, calles estrechas, direcciones incorrectas y la ausencia del cliente generan re-entregas que duplican el costo de cada paquete."
             icon="🚨"
             title="LA HEMORRAGIA URBANA — Última Milla"
             dossier={'Auditoría urgente al departamento de E-commerce. Las ventas por página web están rompiendo récords, pero los márgenes de ganancia desaparecieron. El contador sospecha de la logística urbana.\n\nMueve el escáner de precisión para identificar QUÉ PORCENTAJE EXACTO del costo total logístico se está evaporando únicamente en el tramo final de entrega domiciliaria. Un porcentaje mal calibrado y seguirás perdiendo millones.'}
@@ -329,6 +351,10 @@ export default function SimuladorApp() {
         {phase === 'c5_r5' && (
           <CrisisWrapper
             crisisNumber={5}
+            forensicId="c5_r5"
+            expectedKeywords={['rfid', 'radiofrecuencia', 'ondas', 'sin línea de vista', 'trazabilidad', 'pallet', 'automático']}
+            correctAnswerSummary="RFID — Identificación por Radiofrecuencia"
+            whyTheory="RFID (Identificación por Radiofrecuencia) permite lectura automática de pallets enteros en milisegundos mediante ondas electromagnéticas, sin necesidad de línea de visión directa. Supera al código de barras que exige apuntar manualmente caja por caja."
             icon="🚨"
             title="HACKEO DEL INVENTARIO — Tecnología"
             dossier={'¡Viernes de Black Friday! Tenemos 10,000 pallets represados en los muelles de salida. El sistema láser de código de barras colapsó y leer visualmente caja por caja nos tomará un mes.\n\nExiste una tecnología militar adaptada al CEDI que lee cientos de cajas automáticamente por ondas electromagnéticas, sin línea de visión, al pasar por un arco. Digita su sigla de 4 letras para encender las antenas y salvar la operación.'}
@@ -347,6 +373,10 @@ export default function SimuladorApp() {
         {phase === 'c5_r6' && (
           <CrisisWrapper
             crisisNumber={6}
+            forensicId="c5_r6"
+            expectedKeywords={['picking', 'packing', 'recolectar', 'empacar', 'caminar', 'estación', 'caja', 'cinta']}
+            correctAnswerSummary="Gemelo A = PICKING (recolectar caminando), Gemelo B = PACKING (empacar fijo)"
+            whyTheory="PICKING (Pick = Recoger) es el operario que CAMINA por la bodega recolectando artículos. PACKING (Pack = Empacar) es la estación FIJA donde se arma la caja con burbujas y cinta. Cruzarlos genera devoluciones millonarias."
             icon="🚨"
             title="EL ACERTIJO DE LOS GEMELOS OPERATIVOS — Picking vs Packing"
             dossier={'¡Alto ahí, Gerente! Para abrir los portones del CEDI, despachar los camiones y graduarte, el auditor jefe te exige resolver el último gran acertijo para demostrar que dominas el idioma de la bodega.'}
