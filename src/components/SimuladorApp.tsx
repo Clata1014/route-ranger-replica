@@ -329,6 +329,10 @@ export default function SimuladorApp() {
         {phase === 'c5_r4' && (
           <CrisisWrapper
             crisisNumber={4}
+            forensicId="c5_r4"
+            expectedKeywords={['última milla', 'last mile', '53', 'tráfico', 're-entrega', 'reentrega', 'urbano', 'domicilio']}
+            correctAnswerSummary="53% del costo total logístico se va en la Última Milla"
+            whyTheory="La Última Milla (Last Mile) representa hasta el 53% del costo total logístico. Es el tramo más corto pero el más ineficiente: tráfico urbano, calles estrechas, direcciones incorrectas y la ausencia del cliente generan re-entregas que duplican el costo de cada paquete."
             icon="🚨"
             title="LA HEMORRAGIA URBANA — Última Milla"
             dossier={'Auditoría urgente al departamento de E-commerce. Las ventas por página web están rompiendo récords, pero los márgenes de ganancia desaparecieron. El contador sospecha de la logística urbana.\n\nMueve el escáner de precisión para identificar QUÉ PORCENTAJE EXACTO del costo total logístico se está evaporando únicamente en el tramo final de entrega domiciliaria. Un porcentaje mal calibrado y seguirás perdiendo millones.'}
