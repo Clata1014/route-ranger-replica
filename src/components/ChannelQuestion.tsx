@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Truck, Store, Bike } from 'lucide-react';
 import { speak } from '@/lib/speech';
+import { recordForensic } from '@/lib/forensicLog';
 
 interface ChannelQuestionProps {
   icon: 'truck' | 'store' | 'bike';
@@ -17,6 +18,8 @@ interface ChannelQuestionProps {
   errorVoice: string;
   onSuccess: () => void;
   onError: () => void;
+  /** Forensic id for the report (e.g. 'c1_channel'). */
+  forensicId?: string;
 }
 
 const ICONS = {
