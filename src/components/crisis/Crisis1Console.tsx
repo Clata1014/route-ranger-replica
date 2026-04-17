@@ -8,6 +8,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from '@/components/ui/dialog';
+import InstructorOverride from '@/components/InstructorOverride';
 
 const STORAGE_KEY = 'crisis1_cedi_console_v1';
 
@@ -122,6 +123,14 @@ const Crisis1Console = forwardRef<Crisis1Ref>((_, ref) => {
     setNodes([]);
   }, [locked]);
 
+  const unlockSection = () => {
+    localStorage.removeItem(STORAGE_KEY);
+    setNodes([]);
+    setLocked(false);
+    setText('');
+    setPendingNode(null);
+  };
+
   return (
     <div className="space-y-4">
       {/* Canvas / lienzo */}
@@ -178,9 +187,16 @@ const Crisis1Console = forwardRef<Crisis1Ref>((_, ref) => {
           [🗑 LIMPIAR FLUJO]
         </button>
         {locked && (
-          <span className="text-[10px] font-mono text-red-400 uppercase tracking-widest">
-            🔒 Registrado — solo lectura
-          </span>
+          <InstructorOverride onUnlock={unlockSection}>
+            {({ onDoubleClick }) => (
+              <span
+                onDoubleClick={onDoubleClick}
+                className="text-[10px] font-mono text-red-400 uppercase tracking-widest select-none"
+              >
+                🔒 Registrado — solo lectura
+              </span>
+            )}
+          </InstructorOverride>
         )}
       </div>
 
