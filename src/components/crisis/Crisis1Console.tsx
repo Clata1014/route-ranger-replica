@@ -8,6 +8,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from '@/components/ui/dialog';
+import InstructorOverride from '@/components/InstructorOverride';
 
 const STORAGE_KEY = 'crisis1_cedi_console_v1';
 
