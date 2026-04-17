@@ -351,6 +351,10 @@ export default function SimuladorApp() {
         {phase === 'c5_r5' && (
           <CrisisWrapper
             crisisNumber={5}
+            forensicId="c5_r5"
+            expectedKeywords={['rfid', 'radiofrecuencia', 'ondas', 'sin línea de vista', 'trazabilidad', 'pallet', 'automático']}
+            correctAnswerSummary="RFID — Identificación por Radiofrecuencia"
+            whyTheory="RFID (Identificación por Radiofrecuencia) permite lectura automática de pallets enteros en milisegundos mediante ondas electromagnéticas, sin necesidad de línea de visión directa. Supera al código de barras que exige apuntar manualmente caja por caja."
             icon="🚨"
             title="HACKEO DEL INVENTARIO — Tecnología"
             dossier={'¡Viernes de Black Friday! Tenemos 10,000 pallets represados en los muelles de salida. El sistema láser de código de barras colapsó y leer visualmente caja por caja nos tomará un mes.\n\nExiste una tecnología militar adaptada al CEDI que lee cientos de cajas automáticamente por ondas electromagnéticas, sin línea de visión, al pasar por un arco. Digita su sigla de 4 letras para encender las antenas y salvar la operación.'}
