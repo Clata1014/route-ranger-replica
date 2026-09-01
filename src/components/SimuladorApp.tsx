@@ -61,6 +61,10 @@ export default function SimuladorApp() {
   const handleStart = () => {
     if (!teamName.trim()) return;
     initSpeech();
+    setErrorCount(0);
+    setErrorLog([]);
+    setBuilderProduct(0);
+    setShowPenalty(false);
     setStartTime(Date.now());
     setPhase('c1_channel');
     setTimeout(() => {
