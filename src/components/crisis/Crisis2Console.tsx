@@ -1,4 +1,5 @@
-import { useState, forwardRef, useImperativeHandle } from 'react';
+import { forwardRef, useImperativeHandle } from 'react';
+import { usePersistentState } from '@/lib/persistentState';
 
 const SWITCHES = [
   { id: 'aduanero', label: 'Agente Aduanero Internacional' },
@@ -13,7 +14,7 @@ export interface Crisis2Ref {
 }
 
 const Crisis2Console = forwardRef<Crisis2Ref>((_, ref) => {
-  const [state, setState] = useState<Record<string, boolean>>({
+  const [state, setState] = usePersistentState<Record<string, boolean>>('c2_switches', {
     aduanero: false, mayorista: false, minorista: false, web: false,
   });
 

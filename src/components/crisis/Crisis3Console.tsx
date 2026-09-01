@@ -1,4 +1,5 @@
-import { useState, forwardRef, useImperativeHandle } from 'react';
+import { forwardRef, useImperativeHandle } from 'react';
+import { usePersistentState } from '@/lib/persistentState';
 
 export interface Crisis3Ref {
   validate: () => boolean;
@@ -6,8 +7,8 @@ export interface Crisis3Ref {
 }
 
 const Crisis3Console = forwardRef<Crisis3Ref>((_, ref) => {
-  const [gondolas, setGondolas] = useState(50);
-  const [skus, setSkus] = useState(7500);
+  const [gondolas, setGondolas] = usePersistentState('c3_gondolas', 50);
+  const [skus, setSkus] = usePersistentState('c3_skus', 7500);
 
   useImperativeHandle(ref, () => ({
     validate: () => gondolas === 0 && skus < 1000,

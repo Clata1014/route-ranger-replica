@@ -1,4 +1,5 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
+import { usePersistentState } from '@/lib/persistentState';
 import { ArrowLeft } from 'lucide-react';
 import { initSpeech, speak } from '@/lib/speech';
 import Timer from './Timer';
@@ -26,17 +27,17 @@ type Phase =
   | 'victory';
 
 export default function SimuladorApp() {
-  const [teamName, setTeamName] = useState('');
-  const [phase, setPhase] = useState<Phase>('start');
-  const [startTime, setStartTime] = useState(0);
-  const [showPenalty, setShowPenalty] = useState(false);
-  const [penaltyVoice, setPenaltyVoice] = useState('');
-  const [advancePhase, setAdvancePhase] = useState<Phase>('start');
-  const [errorCount, setErrorCount] = useState(0);
-  const [errorLog, setErrorLog] = useState<string[]>([]);
+  const [teamName, setTeamName] = usePersistentState('teamName', '');
+  const [phase, setPhase] = usePersistentState<Phase>('phase', 'start');
+  const [startTime, setStartTime] = usePersistentState('startTime', 0);
+  const [showPenalty, setShowPenalty] = usePersistentState('showPenalty', false);
+  const [penaltyVoice, setPenaltyVoice] = usePersistentState('penaltyVoice', '');
+  const [advancePhase, setAdvancePhase] = usePersistentState<Phase>('advancePhase', 'start');
+  const [errorCount, setErrorCount] = usePersistentState('errorCount', 0);
+  const [errorLog, setErrorLog] = usePersistentState<string[]>('errorLog', []);
 
   // Lifted product index for ChannelBuilder fail-forward
-  const [builderProduct, setBuilderProduct] = useState(0);
+  const [builderProduct, setBuilderProduct] = usePersistentState('builderProduct', 0);
 
   const crisis1Ref = useRef<Crisis1Ref>(null);
   const crisis2Ref = useRef<Crisis2Ref>(null);
@@ -45,9 +46,25 @@ export default function SimuladorApp() {
   const crisis5Ref = useRef<Crisis5Ref>(null);
   const crisis6Ref = useRef<Crisis6Ref>(null);
 
+  // Warn before losing the tab (progress is saved anyway).
+  useEffect(() => {
+    const onBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (phase !== 'start' && phase !== 'victory') {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    };
+    window.addEventListener('beforeunload', onBeforeUnload);
+    return () => window.removeEventListener('beforeunload', onBeforeUnload);
+  }, [phase]);
+
   const handleStart = () => {
     if (!teamName.trim()) return;
     initSpeech();
+    setErrorCount(0);
+    setErrorLog([]);
+    setBuilderProduct(0);
+    setShowPenalty(false);
     setStartTime(Date.now());
     setPhase('c1_channel');
     setTimeout(() => {

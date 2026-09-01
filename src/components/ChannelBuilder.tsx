@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
+import { usePersistentState } from '@/lib/persistentState';
 import { Factory, Home, Warehouse, ShoppingCart, Cloud, Truck, Zap, RotateCcw, AlertTriangle, Lock } from 'lucide-react';
 import { toast } from 'sonner';
 import { Input } from '@/components/ui/input';
@@ -155,13 +156,13 @@ interface ChannelBuilderProps {
 }
 
 export default function ChannelBuilder({ onVictory, startProduct = 0, onProductAdvance }: ChannelBuilderProps) {
-  const [currentProduct, setCurrentProduct] = useState(startProduct);
+  const [currentProduct, setCurrentProduct] = usePersistentState('cb_currentProduct', startProduct);
   // Route nodes: storing both NodeType (resolved) and raw text fallback
-  const [route, setRoute] = useState<{ type: NodeType | string; label: string; emoji: string }[]>([]);
+  const [route, setRoute] = usePersistentState<{ type: NodeType | string; label: string; emoji: string }[]>(`cb_route_p${currentProduct}`, []);
   // Sub-point decisions per transition (index 0 = first transition)
-  const [subPoints, setSubPoints] = useState<(SubPointOption | null)[]>([]);
+  const [subPoints, setSubPoints] = usePersistentState<(SubPointOption | null)[]>(`cb_sub_p${currentProduct}`, []);
   const [alert, setAlert] = useState('');
-  const [textInput, setTextInput] = useState('');
+  const [textInput, setTextInput] = usePersistentState(`cb_text_p${currentProduct}`, '');
   const [pendingNode, setPendingNode] = useState<{ type: NodeType | string; label: string; emoji: string } | null>(null);
   const [subPointDialogOpen, setSubPointDialogOpen] = useState(false);
 
@@ -178,9 +179,7 @@ export default function ChannelBuilder({ onVictory, startProduct = 0, onProductA
       setRoute(lockedEntry.studentRoute);
       setSubPoints([null, ...lockedEntry.studentSubPoints]);
     } else {
-      setRoute([]);
-      setSubPoints([]);
-      setTextInput('');
+      // Drafts are restored automatically from persistent storage.
       setAlert('');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

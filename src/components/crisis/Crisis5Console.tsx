@@ -1,4 +1,5 @@
 import { useState, forwardRef, useImperativeHandle, useEffect } from 'react';
+import { usePersistentState } from '@/lib/persistentState';
 
 export interface Crisis5Ref {
   validate: () => boolean;
@@ -6,7 +7,7 @@ export interface Crisis5Ref {
 }
 
 const Crisis5Console = forwardRef<Crisis5Ref>((_, ref) => {
-  const [input, setInput] = useState('');
+  const [input, setInput] = usePersistentState('c5_input', '');
   const [blink, setBlink] = useState(true);
 
   useImperativeHandle(ref, () => ({
