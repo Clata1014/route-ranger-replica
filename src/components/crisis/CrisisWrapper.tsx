@@ -1,4 +1,5 @@
 import { useState, useRef, ReactNode } from 'react';
+import { usePersistentState } from '@/lib/persistentState';
 import { speak } from '@/lib/speech';
 import { detectSpam, SPAM_PENALTY } from '@/lib/keywordValidator';
 import { recordForensic, analyzeKeywords } from '@/lib/forensicLog';
@@ -47,7 +48,7 @@ export default function CrisisWrapper({
   correctAnswerSummary,
   whyTheory,
 }: CrisisWrapperProps) {
-  const [justification, setJustification] = useState('');
+  const [justification, setJustification] = usePersistentState(`just_${forensicId || crisisNumber}`, '');
   const hasSigRef = useRef(false);
   const attemptsRef = useRef(0);
 

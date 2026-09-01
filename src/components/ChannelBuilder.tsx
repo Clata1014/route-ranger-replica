@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
+import { usePersistentState } from '@/lib/persistentState';
 import { Factory, Home, Warehouse, ShoppingCart, Cloud, Truck, Zap, RotateCcw, AlertTriangle, Lock } from 'lucide-react';
 import { toast } from 'sonner';
 import { Input } from '@/components/ui/input';
@@ -155,7 +156,7 @@ interface ChannelBuilderProps {
 }
 
 export default function ChannelBuilder({ onVictory, startProduct = 0, onProductAdvance }: ChannelBuilderProps) {
-  const [currentProduct, setCurrentProduct] = useState(startProduct);
+  const [currentProduct, setCurrentProduct] = usePersistentState('cb_currentProduct', startProduct);
   // Route nodes: storing both NodeType (resolved) and raw text fallback
   const [route, setRoute] = useState<{ type: NodeType | string; label: string; emoji: string }[]>([]);
   // Sub-point decisions per transition (index 0 = first transition)

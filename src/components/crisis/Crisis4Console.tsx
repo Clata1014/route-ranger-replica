@@ -1,4 +1,5 @@
-import { useState, forwardRef, useImperativeHandle } from 'react';
+import { forwardRef, useImperativeHandle } from 'react';
+import { usePersistentState } from '@/lib/persistentState';
 
 export interface Crisis4Ref {
   validate: () => boolean;
@@ -6,7 +7,7 @@ export interface Crisis4Ref {
 }
 
 const Crisis4Console = forwardRef<Crisis4Ref>((_, ref) => {
-  const [value, setValue] = useState(50);
+  const [value, setValue] = usePersistentState('c4_value', 50);
 
   useImperativeHandle(ref, () => ({
     validate: () => value === 53,

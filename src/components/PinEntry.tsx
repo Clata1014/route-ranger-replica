@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import { usePersistentState } from '@/lib/persistentState';
 import { MapPin } from 'lucide-react';
 import { speak } from '@/lib/speech';
 import { recordForensic } from '@/lib/forensicLog';
@@ -29,7 +30,7 @@ export default function PinEntry({
   onError,
   forensicId,
 }: PinEntryProps) {
-  const [currentIdx, setCurrentIdx] = useState(0);
+  const [currentIdx, setCurrentIdx] = usePersistentState(`pin_idx_${forensicId || title}`, 0);
   const [input, setInput] = useState('');
   const [feedback, setFeedback] = useState<string | null>(null);
   const [disabled, setDisabled] = useState(false);
