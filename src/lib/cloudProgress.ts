@@ -126,6 +126,18 @@ export function flushToCloud() {
 
 /** Starts autosave: every local change and every 10s is mirrored to the cloud. */
 export function startCloudSync() {
+  // Mirror every tracked localStorage write to the cloud automatically.
+  const nativeSetItem = localStorage.setItem.bind(localStorage);
+  localStorage.setItem = (key: string, value: string) => {
+    nativeSetItem(key, value);
+    if (isTracked(key)) saveToCloud();
+  };
+  const nativeRemoveItem = localStorage.removeItem.bind(localStorage);
+  localStorage.removeItem = (key: string) => {
+    nativeRemoveItem(key);
+    if (isTracked(key)) saveToCloud();
+  };
+
   saveToCloud();
   window.setInterval(() => saveToCloud(), 10000);
   window.addEventListener('pagehide', flushToCloud);
